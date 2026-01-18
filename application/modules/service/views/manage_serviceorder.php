@@ -32,14 +32,14 @@
 					<table class="table table-striped table-bordered" cellspacing="0" width="100%" id="stockdisposalnote">
 						<thead>
 							<tr>
-								<th><?php echo display('sl') ?></th>
-								<th>Invoice No</th>
-								<th>Customer</th>
-								<th>Date</th>
-								<th>Details</th>
-								<th>Total Amount</th>
-                                <th>Status</th>
-								<th><?php echo display('action') ?>
+								<th style="width: 5%;"><?php echo display('sl') ?></th>
+								<th style="width: 10%;">Invoice No</th>
+								<th style="width: 10%;">Customer</th>
+								<th style="width: 10%;">Date</th>
+								<th style="width: 40%;">Details</th>
+								<th style="width: 10%;">Total Amount</th>
+                                <th style="width: 10%;">Status</th>
+								<th style="width: 30%;"><?php echo display('action') ?>
 								</th>
 							</tr>
 						</thead>
