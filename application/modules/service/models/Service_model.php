@@ -1257,11 +1257,11 @@ class Service_model extends CI_Model {
                 }
             }
 
-            if ($record->status == 0) {
+            // if ($record->status == 0) {
 
 
-                $button .= '  <a style="margin-left:5px;"  href="' . $base_url . 'convert_service/' . $record->id . '" class="btn btn-xs btn-success "  onclick="' . $jsaction . '"><i class="fa fa-exchange"></i></a>';
-            }
+            //     $button .= '  <a style="margin-left:5px;"  href="' . $base_url . 'convert_service/' . $record->id . '" class="btn btn-xs btn-success "  onclick="' . $jsaction . '"><i class="fa fa-exchange"></i></a>';
+            // }
 
             // $button .= '  <a href="' . $base_url . 'invoice_details/' . $record->id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
 
