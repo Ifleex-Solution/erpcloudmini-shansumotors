@@ -20,6 +20,7 @@ $route['edit_invoice/(:num)']         = "invoice/invoice/bdtask_invoice_form/$1"
 $route['new_quotation']         = "invoice/invoice/bdtask_quotation_form";
 $route['manage_quotation']        = "invoice/invoice/bdtask_quotation_list";
 $route['edit_quotation/(:num)']         = "invoice/invoice/bdtask_quotation_form/$1";
+$route['convert_sale/(:any)']         = "invoice/invoice/bdtask_convertsales_form/$1";
 
 
 

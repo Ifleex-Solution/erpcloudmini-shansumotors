@@ -1858,7 +1858,7 @@ class Invoice_model extends CI_Model
             $searchQuery = " (po.id like '%" . $searchValue . "%' or po.date like '%" . $searchValue . "%'  
              OR (
         CASE 
-            WHEN po.incidenttype = 1 THEN 'Sales'
+            WHEN po.incidenttype = 1 THEN 'Retail'
             WHEN po.incidenttype = 2 THEN 'Wholesale'
             ELSE ''
         END
@@ -1868,7 +1868,7 @@ class Invoice_model extends CI_Model
 
         ## Total number of records without filtering
         $this->db->select('count(*) as allcount, CASE 
-            WHEN po.incidenttype = 1 THEN \'Sales\'
+            WHEN po.incidenttype = 1 THEN \'Retail\'
             WHEN po.incidenttype = 2 THEN \'Wholesale\'
             ELSE \'\'
         END AS incident');
@@ -1893,7 +1893,7 @@ class Invoice_model extends CI_Model
 
         //     ## Total number of record with filtering
         $this->db->select('count(*) as allcount, CASE 
-            WHEN po.incidenttype = 1 THEN \'Sales\'
+            WHEN po.incidenttype = 1 THEN \'Retail\'
             WHEN po.incidenttype = 2 THEN \'Wholesale\'
             ELSE \'\'
         END AS incident');
@@ -1935,7 +1935,7 @@ class Invoice_model extends CI_Model
          AES_DECRYPT(po.grandTotal, "' . $encryption_key . '") AS grandTotal, 
          AES_DECRYPT(po.total,"' . $encryption_key . '") AS total,
          CASE 
-            WHEN po.incidenttype = 1 THEN \'Sales\'
+            WHEN po.incidenttype = 1 THEN \'Retail\'
             WHEN po.incidenttype = 2 THEN \'Wholesale\'
             ELSE \'\'
         END AS incident,pt.name AS paymenttype,
@@ -2064,25 +2064,35 @@ class Invoice_model extends CI_Model
             $searchQuery = " (po.id like '%" . $searchValue . "%' or po.date like '%" . $searchValue . "%'  
              OR (
         CASE 
-            WHEN po.incidenttype = 1 THEN 'Sales'
+            WHEN po.incidenttype = 1 THEN 'Retail'
             WHEN po.incidenttype = 2 THEN 'Wholesale'
             ELSE ''
         END
     ) LIKE '%" . $searchValue . "%'
-            or   AES_DECRYPT( si.customer_name,'" . $encryption_key . "')  like '%" . $searchValue . "%' or po.details like '%" . $searchValue . "%' ) ";
+     OR (
+                    CASE 
+                        WHEN po.status = 0 THEN 'Ordered'
+                        WHEN po.status = 1 THEN 'Sold'
+                        WHEN po.status = 2 THEN 'Cancelled'
+                        ELSE 'Unknown'
+                    END
+                ) LIKE '%{$searchValue}%'
+            or   AES_DECRYPT( si.customer_name,'" . $encryption_key . "')  like '%" . $searchValue . "%' or po.details like '%" . $searchValue . "%'  ) ";
         }
-
         ## Total number of records without filtering
         $this->db->select('count(*) as allcount, CASE 
-            WHEN po.incidenttype = 1 THEN \'Sales\'
+            WHEN po.incidenttype = 1 THEN \'Retail\'
             WHEN po.incidenttype = 2 THEN \'Wholesale\'
             ELSE \'\'
         END AS incident');
         $this->db->from('quotation po');
         $this->db->join('customer_information si', 'si.customer_id = po.customer_id', "left");
 
-        $this->db->where("AES_DECRYPT(po.type2,'" . $encryption_key . "')", $type2);
-       
+ $this->db->where(
+            "AES_DECRYPT(po.type2, '$encryption_key') IN ('C', '$type2')",
+            null,
+            false
+        );         
         if($branchid>0){
             $this->db->where("po.branch", $branchid);
 
@@ -2098,15 +2108,18 @@ class Invoice_model extends CI_Model
 
         //     ## Total number of record with filtering
         $this->db->select('count(*) as allcount, CASE 
-            WHEN po.incidenttype = 1 THEN \'Sales\'
+            WHEN po.incidenttype = 1 THEN \'Retail\'
             WHEN po.incidenttype = 2 THEN \'Wholesale\'
             ELSE \'\'
         END AS incident');
         $this->db->from('quotation po');
         $this->db->join('customer_information si', 'si.customer_id = po.customer_id', "left");
 
-        $this->db->where("AES_DECRYPT(po.type2,'" . $encryption_key . "')", $type2);
-
+ $this->db->where(
+            "AES_DECRYPT(po.type2, '$encryption_key') IN ('C', '$type2')",
+            null,
+            false
+        );  
         if($branchid>0){
             $this->db->where("po.branch", $branchid);
 
@@ -2139,16 +2152,24 @@ class Invoice_model extends CI_Model
          AES_DECRYPT(po.grandTotal, "' . $encryption_key . '") AS grandTotal, 
          AES_DECRYPT(po.total,"' . $encryption_key . '") AS total,
          CASE 
-            WHEN po.incidenttype = 1 THEN \'Sales\'
+            WHEN po.incidenttype = 1 THEN \'Retail\'
             WHEN po.incidenttype = 2 THEN \'Wholesale\'
             ELSE \'\'
         END AS incident,
         po.details,
-        po.incidenttype');
+        po.incidenttype,
+        CASE 
+        WHEN po.status = 0 THEN \'Ordered\'
+        WHEN po.status = 1 THEN \'Sold\'
+        ELSE \'Canceled\'
+    END AS status_label');
         $this->db->from('quotation po');
         $this->db->join('customer_information si', 'si.customer_id = po.customer_id', "left");
-        $this->db->where("AES_DECRYPT(po.type2,'" . $encryption_key . "')", $type2);
-
+    $this->db->where(
+            "AES_DECRYPT(po.type2, '$encryption_key') IN ('C', '$type2')",
+            null,
+            false
+        ); 
         if($branchid>0){
             $this->db->where("po.branch", $branchid);
 
@@ -2177,26 +2198,58 @@ class Invoice_model extends CI_Model
             $jsaction = "return confirm('Are You Sure ?')";
             // if ($record->status == 0) {
             //     $button .= '  <a  style="margin-left:7px;" href="' . $base_url . 'invoice/invoice/update_salestatus/' . $record->id . '" class="btn btn-xs btn-success "  onclick="' . $jsaction . '"><i class="fa fa-check"></i></a>';
-                
+
             // } else {
             //     $button .= '  <a  style="margin-left:7px;" href="' . $base_url . 'invoice/invoice/update_salestatusredo/' . $record->id . '" class="btn btn-xs btn-warning "  onclick="' . $jsaction . '"><i class="fa fa-repeat"></i></a>';
             // }
 
 
             // $button .= '  <a href="' . $base_url . 'invoice_details/' . $record->id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
+            if ($record->status != 1) {
+                // $button .= '  <a  style="margin-left:7px;" href="' . $base_url . 'invoice/invoice/update_salestatus/' . $record->id . '" class="btn btn-xs btn-success "  onclick="' . $jsaction . '"><i class="fa fa-check"></i></a>';
 
-            if ($this->permission1->method('manage_quotation', 'update')->access()) {
-                $button .= ' <a  style="margin-left:7px;" href="' . $base_url . 'edit_quotation/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
-            }
-            if ($this->permission1->method('manage_quotation', 'delete')->access()) {
+                if ($record->status == 2) {
+                    $button .= '  <a  style="margin-left:5px;" href="' . $base_url . 'invoice/invoice/update_salesorderstatusredo/' . $record->id . '" class="btn btn-xs btn-warning "  onclick="' . $jsaction . '"><i class="fa fa-repeat"></i></a>';
+                }
 
-                $button .= '  <a  style="margin-left:7px;" href="' . $base_url . 'invoice/invoice/delete_quotation/' . $record->id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-trash"></i></a>';
-            }
+                if ($record->status == 0) {
+                    $button .= '  <a  style="margin-left:5px;" href="' . $base_url . 'invoice/invoice/update_saleseorderstatuscancel/' . $record->id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-times"></i></a>';
+                }
+
+                if ($this->permission1->method('manage_quotation', 'update')->access()) {
+                    $button .= ' <a  style="margin-left:7px;" href="' . $base_url . 'edit_quotation/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                    // $button .= ' <a  style="margin-left:7px;" href="' . $base_url . 'edit_invoice2/' . $record->id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+
+                }
+                if ($this->permission1->method('manage_quotation', 'delete')->access()) {
+
+                    $button .= '  <a  style="margin-left:7px;" href="' . $base_url . 'invoice/invoice/delete_quotation/' . $record->id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-trash"></i></a>';
+                }
+            } 
+            if ($record->status == 0) {
+
+
+                $button .= '  <a style="margin-left:5px;"  href="' . $base_url . 'convert_sale/' . $record->id . '" class="btn btn-xs btn-success "  onclick="' . $jsaction . '"><i class="fa fa-exchange"></i></a>';
+    
+                }
 
             $button .= '  </button>  <button  style="margin-left:7px;" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="left" title="Reprint" 
                 onclick="reprintInvoice(' . $record->id . ')">
                 <i class="fa fa-fax" ></i>
             </button>';
+
+             if($record->status==2){
+                $status='<span class="label label-danger"  >'.$record->status_label.'</a>';
+            }
+
+            if($record->status==1){
+                $status='<span class="label label-success"  >'.$record->status_label.'</a>';
+            }
+
+            if($record->status==0){
+                $status='<span class="label label-warning"  >'.$record->status_label.'</a>';
+            }
+
 
 
             $data[] = array(
@@ -2207,6 +2260,7 @@ class Invoice_model extends CI_Model
                 'grandTotal' =>   $record->grandTotal,
                 'incidenttype' => $record->incident,
                 'details'    => $record->details,
+                'status' => $status,
                 'button'   => '<div >' . $button . '</div>',
             );
 

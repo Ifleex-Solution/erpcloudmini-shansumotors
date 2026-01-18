@@ -42,7 +42,6 @@
                             placeholder="<?php echo display('charge') ?>" required="">
                     </div>
                 </div>
-                <?php if($vattaxinfo->fixed_tax ==1){?>
                 <div class="form-group row">
                     <label for="service_vat" class="col-sm-3 col-form-label"><?php echo display('service_vat').' %' ?> </label>
                     <div class="col-sm-6">
@@ -50,7 +49,6 @@
                             placeholder="<?php echo display('service_vat').' %' ?>" >
                     </div>
                 </div>
-                <?php }?>
 
                 <div class="form-group row">
                     <label for="description" class="col-sm-3 col-form-label"><?php echo display('description') ?> <i

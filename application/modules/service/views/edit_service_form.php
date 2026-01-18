@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 
-                <div class="form-group row" <?php if($vattaxinfo->fixed_tax !=1){echo 'hidden';}?>>
+                <div class="form-group row" >
                     <label for="service_vat" class="col-sm-3 col-form-label"><?php echo display('service_vat').' %' ?>
                         </label>
                     <div class="col-sm-6">

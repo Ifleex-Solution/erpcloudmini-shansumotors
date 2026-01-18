@@ -3,7 +3,7 @@
 		<div class="panel panel-bd lobidrag">
 			<div class="panel-heading" id="style12">
 				<div class="panel-title">
-					<span id="title"><?php echo display('manage_service_invoice') ?></span>
+					<span id="title"><?php echo display('manage_serviceorder_invoice') ?></span>
 					<span class="padding-lefttitle">
 						<table>
 							<tr>
@@ -14,8 +14,8 @@
 									</select>
 								</td>
 								<td style="padding-left: 20px;">
-									<?php if ($this->permission1->method('manage_service_invoice', 'create')->access()) { ?>
-										<a href="<?php echo base_url('add_service_invoice') ?>" class="btn btn-primary m-b-5 m-r-2"><i class="ti-plus"> </i> <?php echo display('service_invoice') ?> </a>
+									<?php if ($this->permission1->method('manage_serviceorder_invoice', 'create')->access()) { ?>
+										<a href="<?php echo base_url('serviceorder_invoice') ?>" class="btn btn-primary m-b-5 m-r-2"><i class="ti-plus"> </i> <?php echo display('serviceorder_invoice') ?> </a>
 									<?php } ?>
 								</td>
 							</tr>
@@ -36,9 +36,9 @@
 								<th>Invoice No</th>
 								<th>Customer</th>
 								<th>Date</th>
-								<th>Payment Type</th>
 								<th>Details</th>
 								<th>Total Amount</th>
+                                <th>Status</th>
 								<th><?php echo display('action') ?>
 								</th>
 							</tr>
@@ -47,9 +47,10 @@
 
 						</tbody>
 						<tfoot>
-							<th colspan="6" class="text-right"><?php echo display('total') ?>:</th>
+							<th colspan="5" class="text-right"><?php echo display('total') ?>:</th>
 
 							<th></th>
+                            <th></th>
 							<th></th>
 						</tfoot>
 					</table>
@@ -87,7 +88,7 @@ echo "</script>";
 		if (confirm("Do you want to reprint this record")) {
 			$.ajax({
 				type: "post",
-				url: $('#base_url').val() + 'service/service/service_print',
+				url: $('#base_url').val() + 'service/service/service_order_print',
 				data: {
 					id: invoiceId,
 
@@ -205,7 +206,7 @@ echo "</script>";
 
 					'serverMethod': 'post',
 					'ajax': {
-						'url': base_url + 'service/service/checkservice',
+						'url': base_url + 'service/service/checkserviceorder',
 						data: {
 							csrf_test_name: csrf_test_name,
 							type2: type2,
@@ -226,9 +227,6 @@ echo "</script>";
 							data: 'date'
 						},
 						{
-							data: 'paymenttype'
-						},
-						{
 							data: 'details'
 						},
 						
@@ -238,6 +236,10 @@ echo "</script>";
 							data: 'grandTotal',
 							class: "total_sale text-right",
 							render: $.fn.dataTable.render.number(',', '.', 2)
+						},
+
+                        {
+							data: 'status'
 						},
 
 						// },

@@ -15,7 +15,7 @@
                                                   <br/>
 
                             <span
-                                class="label label-success-outline m-r-15 p-10"><?php echo display('billing_from') ?></span>
+                                class="label label-success-outline m-r-15 p-10">Order From</span>
                             <address class="margin-top10">
                                 <strong class=""><?php echo $company_info[0]['company_name'] ?></strong><br>
                                 <span class="comp-web"><?php echo $company_info[0]['address'] ?></span><br>
@@ -31,7 +31,7 @@
                        
 
                         <div class="col-xs-4 text-left ">
-                            <h2 class="m-t-0">Quotation</h2>
+                            <h2 class="m-t-0">Job Order</h2>
                             <div>
                                 <abbr class="font-bold">
                                     <?php echo display('invoice_no') ?>: <span dir="ltr"></span>
@@ -44,7 +44,7 @@
                                 <br>
                             </div>
 
-                            <span class="label label-success-outline m-r-15"><?php echo display('billing_to') ?></span>
+                            <span class="label label-success-outline m-r-15">Order To</span>
 
                             <address style="margin-top: 10px;" class="">
                                 <strong class=""><?php echo $customer_name ?> </strong><br>
@@ -82,7 +82,7 @@
                     <table class="invoice-details" width="100%;">
                         <tr>
                             <th style="border-bottom: 2px solid; border-top: 2px solid; padding: 10px; font-size: 14px;">SL.</th>
-                            <th style="border-bottom: 2px solid; border-top: 2px solid; padding: 5px; font-size: 14px;">Product Name</th>
+                            <th style="border-bottom: 2px solid; border-top: 2px solid; padding: 5px; font-size: 14px;">Service Name</th>
                             <th style=" border-bottom: 2px solid; border-top: 2px solid; padding: 10px; font-size: 14px;text-align: right;">Qty</th>
                             <th style=" border-bottom: 2px solid; border-top: 2px solid; padding: 10px; font-size: 14px;text-align: right;">Rate</th>
                             <th style=" border-bottom: 2px solid; border-top: 2px solid; padding: 10px;font-size: 14px;text-align: right;">Dis. Value</th>
@@ -120,18 +120,16 @@
 
                         </tr>
                        <tr>
-    <!-- ROWSPAN CELL (appears only once) -->
     <td colspan="3" rowspan="3"
         style="text-align:left;
-              
                font-size:14px;
                padding:5px;
                vertical-align:middle;">
-   <?php echo $details; ?>
-       </td>
+                <?php echo $details; ?>
+    </td>
 
     <td colspan="2" style="text-align:right;font-size:14px;padding:5px;">
-        <b>Sale Discount:</b>
+        <b>Service Discount:</b>
     </td>
     <td style="text-align:right;font-size:14px;padding:5px;">
         <?php echo number_format($total_dis, 2, '.', ','); ?>

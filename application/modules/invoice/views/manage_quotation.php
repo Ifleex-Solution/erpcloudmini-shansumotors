@@ -33,12 +33,13 @@
 						<thead>
 							<tr>
 								<th><?php echo display('sl') ?></th>
-								<th>Quotation No</th>
+								<th>Order No</th>
 								<th>Customer</th>
 								<th>Date</th>
 								<th>Details</th>
 								<th>Incident Type</th>
 								<th>Total Amount</th>
+								<th>Status</th>
 								<th><?php echo display('action') ?>
 								</th>
 							</tr>
@@ -49,6 +50,7 @@
 						<tfoot>
 							<th colspan="6" class="text-right"><?php echo display('total') ?>:</th>
 
+							<th></th>
 							<th></th>
 							<th></th>
 						</tfoot>
@@ -237,6 +239,9 @@ echo "</script>";
 							data: 'grandTotal',
 							class: "total_sale text-right",
 							render: $.fn.dataTable.render.number(',', '.', 2)
+						},
+							{
+							data: 'status'
 						},
 
 						// },

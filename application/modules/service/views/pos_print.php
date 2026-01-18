@@ -31,7 +31,7 @@
                        
 
                         <div class="col-xs-4 text-left ">
-                            <h2 class="m-t-0">Quotation</h2>
+                            <h2 class="m-t-0">Service</h2>
                             <div>
                                 <abbr class="font-bold">
                                     <?php echo display('invoice_no') ?>: <span dir="ltr"></span>
@@ -119,19 +119,17 @@
 
 
                         </tr>
-                       <tr>
-    <!-- ROWSPAN CELL (appears only once) -->
+                         <tr>
     <td colspan="3" rowspan="3"
         style="text-align:left;
-              
                font-size:14px;
                padding:5px;
                vertical-align:middle;">
-   <?php echo $details; ?>
-       </td>
+                <?php echo $details; ?>
+    </td>
 
     <td colspan="2" style="text-align:right;font-size:14px;padding:5px;">
-        <b>Sale Discount:</b>
+        <b>Service Discount:</b>
     </td>
     <td style="text-align:right;font-size:14px;padding:5px;">
         <?php echo number_format($total_dis, 2, '.', ','); ?>

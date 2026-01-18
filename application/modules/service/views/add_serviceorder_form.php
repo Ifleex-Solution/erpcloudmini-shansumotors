@@ -1,8 +1,9 @@
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/purchase.js" type="text/javascript"></script>
 
+
 <style>
     .col-big {
-        width: 15% !important;
+        width: 20% !important;
     }
 
     .col-total {
@@ -10,11 +11,11 @@
     }
 
     .col-medium {
-        width: 10% !important;
+        width: 11% !important;
     }
 
     .col-medium2 {
-        width: 12% !important;
+        width: 15% !important;
     }
 
     .vathidden {
@@ -23,10 +24,6 @@
 
     .col-small {
         width: 7% !important;
-    }
-
-    .col-small2 {
-        width: 9% !important;
     }
 </style>
 <div class="row">
@@ -47,7 +44,7 @@
 
                     <div class="col-sm-6">
                         <div class="form-group row">
-                            <label for="date" class="col-sm-4 col-form-label">Sale Date
+                            <label for="date" class="col-sm-4 col-form-label">Service Date
                                 <i class="text-danger">*</i>
                             </label>
                             <div class="col-sm-6">
@@ -66,7 +63,7 @@
                                 <i class="text-danger">*</i>
                             </label>
                             <div class="col-sm-6">
-                                <select class="form-control" id="branch" required name="branch" tabindex="3" onchange="getSalesOrderDropdown()">
+                                <select class="form-control" id="branch" required name="branch" tabindex="3" >
 
 
                                 </select>
@@ -75,54 +72,6 @@
                         </div>
 
                     </div>
-
-                    <div class="col-sm-6" id="showorderno">
-                        <div class="form-group row">
-                            <label for="supplier_sss" class="col-sm-4 col-form-label">Sales Order No
-                            </label>
-                            <div class="col-sm-6">
-                                <select class="form-control" id="sales_order_no" required name="sales_order_no" tabindex="3" onchange="getSalesOrderDetails()">
-
-
-                                </select>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-6" id="showorderno2">
-                        <div class="form-group row">
-                            <label for="supplier_sss" class="col-sm-4 col-form-label">Sales Order No
-                            </label>
-                            <div class="col-sm-6">
-                                <input type="hidden" tabindex="2" class="form-control" value="" id="sales_order_no_convert"  />
-                                <input type="text" tabindex="2" class="form-control" value="" id="sales_order_no1" readonly />
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="form-group row">
-                            <label for="supplier_sss" class="col-sm-4 col-form-label">Incident Type
-                                <i class="text-danger">*</i>
-                            </label>
-                            <div class="col-sm-6">
-                                <select class="form-control" id="incidenttype" required name="incidenttype" tabindex="3">
-                                    <option value=""></option>
-                                    <option value="1">Retail</option>
-                                    <option value="2">Wholesale</option>
-
-                                </select>
-                            </div>
-
-                        </div>
-
-                    </div>
-
 
 
 
@@ -190,63 +139,29 @@
                 <br>
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover" id="saleTable">
-                         <thead>
+                        <thead>
                             <tr>
-
-
-
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <th class="text-center col-medium">Product<i
-                                            class="text-danger">*</i></th>
-                                <?php } else { ?>
-                                    <th class="text-center col-medium2">Product<i
-                                            class="text-danger">*</i></th>
-                                <?php } ?>
-
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <th class="text-center col-small">Store<i class="text-danger">*</i>
-                                    </th>
-                                <?php } else { ?>
-                                    <th class="text-center col-small2">Store<i class="text-danger">*</i>
-                                    </th>
-                                <?php } ?>
-
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <th class="text-center col-small">Unit </th>
-
-                                <?php } else { ?>
-                                    <th class="text-center col-small2">Unit </th>
-
-                                <?php } ?>
-
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <th class="text-center col-small">Av.Qty</th>
-
-                                <?php } else { ?>
-                                    <th class="text-center col-small2">Av.Qty</th>
-
-                                <?php } ?>
-
-                                        <?php if ($vtinfo->ischecked == 1) { ?>
-                       <th class="text-center col-small">Qty<i
+                                <th class="text-center  col-big">Service<i
                                         class="text-danger">*</i></th>
 
-                                <?php } else { ?>
-                                      <th class="text-center col-small2">Qty<i
+                                 <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <th class="text-center col-medium">Qty<i
                                         class="text-danger">*</i></th>
-
-                                <?php } ?>
-
-                              
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <th class="text-center col-medium">Price val <i
-                                            class="text-danger"> *</i></th>
                                 <?php } else { ?>
-                                    <th class="text-center col-medium2">Price val <i
-                                            class="text-danger"> *</i></th>
+                                     <th class="text-center col-medium2">Qty<i
+                                        class="text-danger">*</i></th>
+                                <?php } ?>
+                               
+                               
+                                  <?php if ($vtinfo->ischecked == 1) { ?>
+                                   <th class="text-center col-medium">Price val <i
+                                        class="text-danger"> *</i></th>
+                                <?php } else { ?>
+                                     <th class="text-center col-medium2">Price val <i
+                                        class="text-danger"> *</i></th>
                                 <?php } ?>
 
-
+                                 
 
                                 <?php if ($vtinfo->ischecked == 1) { ?>
                                     <th class="text-center col-medium">Discount</th>
@@ -273,6 +188,7 @@
                                     <th class="text-center col-medium2">Total</th>
 
                                 <?php } ?>
+
                                 <th class="text-center col-medium"><?php echo display('action') ?></th>
                                 <th></th>
                             </tr>
@@ -281,34 +197,16 @@
                             <tr id="myRow1">
                                 <td class="product_field">
 
-                                    <select name="product[]" class="form-control" id="product1" tabindex="1" onchange="product_search(1,'product')">
-                                        <option value="">Select Product</option>
-                                        <?php foreach ($products as $services) {
-                                            echo $services['id']; ?>
-                                            <option value="<?php echo $services['id']; ?>"><?php echo $services['product_name']; ?></option>
-
-                                        <?php  }   ?>
-                                    </select>
+                                       <select name="product[]" class="form-control" id="product1" tabindex="1" onchange="product_search(1, 'product')">
+                                            <option value="">Select Product</option>
+                                            <?php foreach ($services as $service) { ?>
+                                                <option value="<?php echo $service['service_id']; ?>"><?php echo $service['service_name']; ?></option>
+                                            <?php } ?>
+                                        </select>
 
 
                                 </td>
 
-                                <td class="rate">
-                                    <select class="form-control" id="store1" name="store[]" tabindex="3" onchange="product_search(1,'store')">
-                                        <option value=""></option>
-                                    </select>
-                                </td>
-
-                                <td class="qty">
-                                    <input type="text" name="unit[]" onkeyup="product_search(1,'unit');"
-                                        class="total_qntt_1 form-control text-right"
-                                        id="unit1" value="" min="0" readonly />
-                                </td>
-                                <td class="qty">
-                                    <input type="number" name="avqty[]" onkeyup="product_search(1,'avqty');"
-                                        class="total_qntt_1 form-control text-right"
-                                        id="avqty1" placeholder="0.00" min="0" readonly />
-                                </td>
 
 
 
@@ -364,29 +262,15 @@
                                     <td class="product_field">
                                         <select name="product[]" class="form-control" id="product<?php echo $i; ?>" tabindex="1" onchange="product_search(<?php echo $i; ?>, 'product')">
                                             <option value="">Select Product</option>
-                                            <?php foreach ($products as $services) { ?>
-                                                <option value="<?php echo $services['id']; ?>"><?php echo $services['product_name']; ?></option>
+                                            <?php foreach ($services as $service) { ?>
+                                                <option value="<?php echo $service['service_id']; ?>"><?php echo $service['service_name']; ?></option>
                                             <?php } ?>
                                         </select>
                                     </td>
 
 
 
-                                    <td class="rate">
-                                        <select class="form-control" id="store<?php echo $i; ?>" name="store[]" tabindex="3" onchange="product_search(<?php echo $i; ?>, 'store')">
-                                            <option value=""></option>
-                                        </select>
-                                    </td>
 
-
-
-                                    <td class="qty">
-                                        <input type="text" name="unit[]" onkeyup="product_search(<?php echo $i; ?>, 'unit');" class="total_qntt_1 form-control text-right" id="unit<?php echo $i; ?>" value="" min="0" readonly />
-                                    </td>
-
-                                    <td class="qty">
-                                        <input type="number" name="avqty[]" onkeyup="product_search(<?php echo $i; ?>, 'avqty');" class="total_qntt_1 form-control text-right" id="avqty<?php echo $i; ?>" placeholder="0.00" min="0" readonly />
-                                    </td>
 
                                     <td class="qty">
                                         <input type="text" name="product_quantity[]" id="qty<?php echo $i; ?>" min="0" class="form-control text-right store_cal_1" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" placeholder="0.00" value="" tabindex="6" />
@@ -440,10 +324,10 @@
                         <tfoot>
                             <tr>
                                 <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <td class="text-right" colspan="10"><b><?php echo display('total') ?>:</b></td>
+                                    <td class="text-right" colspan="7"><b><?php echo display('total') ?>:</b></td>
 
                                 <?php } else { ?>
-                                    <td class="text-right" colspan="8"><b><?php echo display('total') ?>:</b></td>
+                                    <td class="text-right" colspan="5"><b><?php echo display('total') ?>:</b></td>
 
                                 <?php } ?>
                                 <td class="text-right">
@@ -459,14 +343,14 @@
 
 
                                 <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <td class="text-right" colspan="10"><b>Sale Discount:</b>
+                                    <td class="text-right" colspan="7"><b>Service Discount:</b>
                                     </td>
                                 <?php } else { ?>
-                                    <td class="text-right" colspan="8"><b>Sale Discount:</b>
+                                    <td class="text-right" colspan="5"><b>Service Discount:</b>
                                     </td>
                                 <?php } ?>
                                 <td class="text-right">
-                                    <input type="text" id="discount" class="text-right form-control discount total_discount_val" onkeyup="calculate_store(1)" name="discount" placeholder="0.00" value="" />
+                                    <input type="text" id="discount" class="text-right form-control discount total_discount_val" onkeyup="calculate_sum(1)" name="discount" placeholder="0.00" value="" />
                                 </td>
 
                                 <td>
@@ -475,30 +359,28 @@
                             </tr>
                             <tr>
                                 <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <td class="text-right" colspan="10"><b><?php echo display('total_discount') ?>:</b></td>
+                                    <td class="text-right" colspan="7"><b><?php echo display('total_discount') ?>:</b></td>
 
                                 <?php } else { ?>
-                                    <td class="text-right" colspan="8"><b><?php echo display('total_discount') ?>:</b></td>
+                                    <td class="text-right" colspan="5"><b><?php echo display('total_discount') ?>:</b></td>
 
                                 <?php } ?>
                                 <td class="text-right">
                                     <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
                                 </td>
-                                   <td>
+                                                                <td> </td>
 
-                                </td>
                             </tr>
                             <?php if ($vtinfo->ischecked == 1) { ?>
                                 <tr>
 
-                                    <td class="text-right" colspan="10"><b><?php echo display('ttl_val') ?>:</b></td>
+                                    <td class="text-right" colspan="7"><b><?php echo display('ttl_val') ?>:</b></td>
 
                                     <td class="text-right">
                                         <input type="text" id="total_vat_amnt" class="form-control text-right" name="total_vat_amnt" value="0.00" readonly="readonly" />
                                     </td>
-                                       <td>
+                                                                    <td> </td>
 
-                                </td>
                                 </tr>
                             <?php } else {  ?>
                                 <input type="hidden" class="form-control" name="vat" id="total_vat_amnt" value="0.0">
@@ -508,10 +390,10 @@
                             <tr>
 
                                 <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <td class="text-right" colspan="10"><b><?php echo display('grand_total') ?>:</b></td>
+                                    <td class="text-right" colspan="7"><b><?php echo display('grand_total') ?>:</b></td>
 
                                 <?php } else { ?>
-                                    <td class="text-right" colspan="8"><b><?php echo display('grand_total') ?>:</b></td>
+                                    <td class="text-right" colspan="5"><b><?php echo display('grand_total') ?>:</b></td>
 
                                 <?php } ?>
                                 <td class="text-right">
@@ -525,23 +407,6 @@
                     <input type="hidden" name="finyear" value="<?php echo financial_year(); ?>">
                     <p hidden id="pay-amount"></p>
                     <p hidden id="change-amount"></p>
-                    <div class="col-sm-3 table-bordered p-20">
-                        <div id="adddiscount" class="display-none">
-                            <div class="row no-gutters">
-                                <div class="form-group ">
-                                    <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type'); ?> <i class="text-danger">*</i>
-                                    </label>
-                                    <select name="multipaytype[]" class="form-control" id="your_dropdown_id" tabindex="1">
-                                        <option value="">Select an option</option>
-                                        <?php foreach ($all_pmethod as $services) { ?>
-                                            <option value="<?php echo $services['id']; ?>"><?php echo $services['name']; ?></option>
-                                        <?php } ?>
-                                    </select>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="form-group row text-right">
@@ -559,12 +424,11 @@
 <?php
 echo "<script>";
 echo "let id = " . json_encode($id) . ";";
-echo "let products=" . json_encode($products) . ";";
-echo "let stores=" . json_encode($store_list) . ";";
+echo "let services=" . json_encode($service_list) . ";";
 echo "let customers=" . json_encode($all_customer) . ";";
 echo "let employees=" . json_encode($all_employee) . ";";
 echo "let usertype=" . json_encode($this->session->userdata('user_level2')) . ";";
-echo "let pagetype=" . json_encode($pagetype) . ";";
+
 echo "let pmethods=" . json_encode($all_pmethod) . ";";
 echo "let vtinfo=" . json_encode($vtinfo) . ";";
 echo "</script>";
@@ -584,8 +448,9 @@ echo "</script>";
 
     }
     let count = 2
+    getActiveProduct(0, 1)
 
-  document.getElementById("showorderno2").style.display = "none";
+
 
 
     $(document).ready(function() {
@@ -594,312 +459,92 @@ echo "</script>";
         }
 
 
+        
         if (id != null) {
-            if (pagetype == "") {
+            $.ajax({
+                url: $('#base_url').val() + 'service/service/getServiceOrderById',
+                type: 'POST',
+                data: {
+                    id: id,
+                    type2: type2
+                },
+                success: function(response) {
+                    var sales = JSON.parse(response);
+                    document.getElementById('date').value = sales[0].date;
+                    document.getElementById('details').value = sales[0].details;
 
-                $.ajax({
-                    url: $('#base_url').val() + 'invoice/invoice/getSaleById',
-                    type: 'POST',
-                    data: {
-                        id: id,
-                        type2: type2
-                    },
-                    success: function(response) {
-                        var sales = JSON.parse(response);
-                        document.getElementById('date').value = sales[0].date;
-                        document.getElementById('details').value = sales[0].details;
+                    getBranchDropdown(sales[0].branch);
 
-                        getBranchDropdown(sales[0].branch);
-
-                        document.getElementById("showorderno").style.display = "none";
-                        document.getElementById("showorderno2").style.display = "block";
-                        document.getElementById('sales_order_no1').value = sales[0].sales_order_no;
+                
 
 
 
 
-                        var $customerDropdown = $('#customer_id');
-                        $customerDropdown.empty();
-                        $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
-                        $.each(customers, function(index, customer) {
-                            $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
-                        });
-                        $customerDropdown.val(sales[0].customer_id)
+                    var $customerDropdown = $('#customer_id');
+                    $customerDropdown.empty();
+                    $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
+                    $.each(customers, function(index, customer) {
+                        $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
+                    });
+                    $customerDropdown.val(sales[0].customer_id)
 
-                        var $employeeDropdown = $('#employee_id');
-                        $employeeDropdown.empty();
-                        $employeeDropdown.append('<option value="" disabled selected>Select Employee</option>'); // Add default option
-                        $.each(employees, function(index, employee) {
-                            $employeeDropdown.append('<option value="' + employee.id + '">' + employee.first_name + " " + employee.last_name + '</option>');
-                        });
-                        $employeeDropdown.val(sales[0].employee_id)
-
-                        var $paymentDropdown = $('#your_dropdown_id');
-                        $paymentDropdown.empty();
-                        $paymentDropdown.append('<option value="" disabled selected>Select Supplier</option>'); // Add default option
-                        $.each(pmethods, function(index, supplier) {
-                            $paymentDropdown.append('<option value="' + supplier.id + '">' + supplier.name + '</option>');
-                        });
-                        $paymentDropdown.val(sales[0].payment_type)
-
-                        var $incidenttypeDropdown = $('#incidenttype');
-                        $incidenttypeDropdown.empty();
-                        $incidenttypeDropdown.append('<option value="" disabled selected>Select Incident Type</option>'); // Add default option
-                        $incidenttypeDropdown.append('<option value="1">Retail</option>');
-                        $incidenttypeDropdown.append('<option value="2">Wholesale</option>');
-                        $incidenttypeDropdown.val(sales[0].incidenttype)
-
-                        document.getElementById('total_discount_ammount').value = sales[0].total_discount_ammount;
-                        document.getElementById('total_vat_amnt').value = sales[0].total_vat_amnt;
-                        document.getElementById('grandTotal').value = sales[0].grandTotal;
-                        document.getElementById('Total').value = sales[0].total;
-                        document.getElementById('discount').value = sales[0].discount;
-
-                        // count = 1;
-                        for (let i = 0; i < sales.length; i++) {
-                            let a = i + 1;
-                            document.getElementById('myRow' + a).style.display = 'table-row';
-                            getActiveProduct(sales[i].product, a);
-                            getActiveStore(sales[i].store, a);
-
-                            document.getElementById('qty' + a).value = sales[i].quantity;
-                            document.getElementById('unit' + a).value = sales[i].unit;
-                            document.getElementById('avqty' + a).value = sales[i].avstock;
-                            document.getElementById('product_rate' + a).value = sales[i].product_rate;
-                            document.getElementById('discount' + a).value = sales[i].discount2;
-                            document.getElementById('discount_value' + a).value = sales[i].discount_value;
-
-                            if (vtinfo.ischecked == 1) {
-                                document.getElementById('vat_percent' + a).value = sales[i].vat_percent;
-                            }
-                            document.getElementById('vat_value' + a).value = sales[i].vat_value;
-                            document.getElementById('total_price' + a).value = sales[i].total_price;
-                            document.getElementById('total_discount' + a).value = sales[i].total_discount;
-                            document.getElementById('all_discount' + a).value = sales[i].all_discount;
+                    var $employeeDropdown = $('#employee_id');
+                    $employeeDropdown.empty();
+                    $employeeDropdown.append('<option value="" disabled selected>Select Employee</option>'); // Add default option
+                    $.each(employees, function(index, employee) {
+                        $employeeDropdown.append('<option value="' + employee.id + '">' + employee.first_name + " " + employee.last_name + '</option>');
+                    });
+                    $employeeDropdown.val(sales[0].employee_id)
 
 
+                    document.getElementById('total_discount_ammount').value = sales[0].total_discount_ammount;
+                    document.getElementById('total_vat_amnt').value = sales[0].total_vat_amnt;
+                    document.getElementById('grandTotal').value = sales[0].grandTotal;
+                    document.getElementById('Total').value = sales[0].total;
+                    document.getElementById('discount').value = sales[0].discount;
 
-                            count = count + 1;
+                    // count = 1;
+                    for (let i = 0; i < sales.length; i++) {
+                        let a = i + 1;
+                        document.getElementById('myRow' + a).style.display = 'table-row';
+                        getActiveProduct(sales[i].service, a);
+
+                        document.getElementById('qty' + a).value = sales[i].quantity;
+                        document.getElementById('product_rate' + a).value = sales[i].product_rate;
+                        document.getElementById('discount' + a).value = sales[i].discount2;
+                        document.getElementById('discount_value' + a).value = sales[i].discount_value;
+
+                        if (vtinfo.ischecked == 1) {
+                            document.getElementById('vat_percent' + a).value = sales[i].vat_percent;
                         }
-                    },
-                    error: function(error) {
-                        console.log(error);
+                        document.getElementById('vat_value' + a).value = sales[i].vat_value;
+                        document.getElementById('total_price' + a).value = sales[i].total_price;
+                        document.getElementById('total_discount' + a).value = sales[i].total_discount;
+                        document.getElementById('all_discount' + a).value = sales[i].all_discount;
+
+
+
+                        count = count + 1;
                     }
-                });
-            }else if (pagetype == "convert") {
-                getSalesOrderDetailsConvert(id)
-            }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
         } else {
             getBranchDropdown(0);
+            getSalesOrderDropdown();
 
         }
     });
 
-    function getSalesOrderDropdown() {
-        var base_url = $('#base_url').val();
+    
 
-        $.ajax({
-            type: "post",
-            url: base_url + "invoice/invoice/getsalesorderidbybranch",
-            data: {
-                type2: type2,
-                branch: document.getElementById("branch").value
-            },
-            success: function(data) {
-
-                var salesorder = JSON.parse(data);
-                console.log(salesorder)
-                var $branchDropdown = $('#sales_order_no');
-                $branchDropdown.empty();
-                $branchDropdown.append('<option value="" disabled selected>Select Sales Order</option>'); // Add default option
-
-                $.each(salesorder, function(index, branch) {
-                    $branchDropdown.append('<option value="' + branch.id + '">' + branch.sale_id + '</option>');
-
-                });
-
-
-
-
-            }
-        });
-    }
-
-    function getSalesOrderDetails() {
-        clearDetails()
-
-        $.ajax({
-            url: $('#base_url').val() + 'invoice/invoice/getQuotationById',
-            type: 'POST',
-            data: {
-                id: document.getElementById("sales_order_no").value,
-                type2: type2
-            },
-            success: function(response) {
-                var sales = JSON.parse(response);
-                document.getElementById('date').value = sales[0].date;
-                document.getElementById('details').value = sales[0].details;
-
-                //getBranchDropdown(sales[0].branch);
-
-
-                var $customerDropdown = $('#customer_id');
-                $customerDropdown.empty();
-                $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
-                $.each(customers, function(index, customer) {
-                    $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
-                });
-                $customerDropdown.val(sales[0].customer_id)
-
-                var $employeeDropdown = $('#employee_id');
-                $employeeDropdown.empty();
-                $employeeDropdown.append('<option value="" disabled selected>Select Employee</option>'); // Add default option
-                $.each(employees, function(index, employee) {
-                    $employeeDropdown.append('<option value="' + employee.id + '">' + employee.first_name + " " + employee.last_name + '</option>');
-                });
-                $employeeDropdown.val(sales[0].employee_id)
-
-
-
-                var $incidenttypeDropdown = $('#incidenttype');
-                $incidenttypeDropdown.empty();
-                $incidenttypeDropdown.append('<option value="" disabled selected>Select Incident Type</option>'); // Add default option
-                $incidenttypeDropdown.append('<option value="1">Retail</option>');
-                $incidenttypeDropdown.append('<option value="2">Wholesale</option>');
-                $incidenttypeDropdown.val(sales[0].incidenttype)
-
-                document.getElementById('total_discount_ammount').value = sales[0].total_discount_ammount;
-                document.getElementById('total_vat_amnt').value = sales[0].total_vat_amnt;
-                document.getElementById('grandTotal').value = sales[0].grandTotal;
-                document.getElementById('Total').value = sales[0].total;
-                document.getElementById('discount').value = sales[0].discount;
-
-                // count = 1;
-                for (let i = 0; i < sales.length; i++) {
-                    let a = i + 1;
-                    document.getElementById('myRow' + a).style.display = 'table-row';
-                    getActiveProduct(sales[i].product, a);
-                    getActiveStore(sales[i].store, a);
-
-                    document.getElementById('qty' + a).value = sales[i].quantity;
-                    document.getElementById('unit' + a).value = sales[i].unit;
-                    document.getElementById('avqty' + a).value = sales[i].avstock;
-                    document.getElementById('product_rate' + a).value = sales[i].product_rate;
-                    document.getElementById('discount' + a).value = sales[i].discount2;
-                    document.getElementById('discount_value' + a).value = sales[i].discount_value;
-
-                    if (vtinfo.ischecked == 1) {
-                        document.getElementById('vat_percent' + a).value = sales[i].vat_percent;
-                    }
-                    document.getElementById('vat_value' + a).value = sales[i].vat_value;
-                    document.getElementById('total_price' + a).value = sales[i].total_price;
-                    document.getElementById('total_discount' + a).value = sales[i].total_discount;
-                    document.getElementById('all_discount' + a).value = sales[i].all_discount;
-
-
-
-                    count = count + 1;
-                }
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-
-    }
-
-     function getSalesOrderDetailsConvert(id) {
-        clearDetails()
-
-        $.ajax({
-            url: $('#base_url').val() + 'invoice/invoice/getQuotationById',
-            type: 'POST',
-            data: {
-                id: id,
-                type2: type2
-            },
-            success: function(response) {
-                var sales = JSON.parse(response);
-                document.getElementById('date').value = sales[0].date;
-                document.getElementById('details').value = sales[0].details;
-
-                document.getElementById("showorderno").style.display = "none";
-                document.getElementById("showorderno2").style.display = "block";
-                document.getElementById('sales_order_no_convert').value=id
-                document.getElementById('sales_order_no1').value = sales[0].sale_id;
-
-                getBranchDropdown(sales[0].branch);
-
-
-                var $customerDropdown = $('#customer_id');
-                $customerDropdown.empty();
-                $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
-                $.each(customers, function(index, customer) {
-                    $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
-                });
-                $customerDropdown.val(sales[0].customer_id)
-
-                var $employeeDropdown = $('#employee_id');
-                $employeeDropdown.empty();
-                $employeeDropdown.append('<option value="" disabled selected>Select Employee</option>'); // Add default option
-                $.each(employees, function(index, employee) {
-                    $employeeDropdown.append('<option value="' + employee.id + '">' + employee.first_name + " " + employee.last_name + '</option>');
-                });
-                $employeeDropdown.val(sales[0].employee_id)
-
-
-
-                var $incidenttypeDropdown = $('#incidenttype');
-                $incidenttypeDropdown.empty();
-                $incidenttypeDropdown.append('<option value="" disabled selected>Select Incident Type</option>'); // Add default option
-                $incidenttypeDropdown.append('<option value="1">Retail</option>');
-                $incidenttypeDropdown.append('<option value="2">Wholesale</option>');
-                $incidenttypeDropdown.val(sales[0].incidenttype)
-
-                document.getElementById('total_discount_ammount').value = sales[0].total_discount_ammount;
-                document.getElementById('total_vat_amnt').value = sales[0].total_vat_amnt;
-                document.getElementById('grandTotal').value = sales[0].grandTotal;
-                document.getElementById('Total').value = sales[0].total;
-                document.getElementById('discount').value = sales[0].discount;
-
-                // count = 1;
-                for (let i = 0; i < sales.length; i++) {
-                    let a = i + 1;
-                    document.getElementById('myRow' + a).style.display = 'table-row';
-                    getActiveProduct(sales[i].product, a);
-                    getActiveStore(sales[i].store, a);
-
-                    document.getElementById('qty' + a).value = sales[i].quantity;
-                    document.getElementById('unit' + a).value = sales[i].unit;
-                    document.getElementById('avqty' + a).value = sales[i].avstock;
-                    document.getElementById('product_rate' + a).value = sales[i].product_rate;
-                    document.getElementById('discount' + a).value = sales[i].discount2;
-                    document.getElementById('discount_value' + a).value = sales[i].discount_value;
-
-                    if (vtinfo.ischecked == 1) {
-                        document.getElementById('vat_percent' + a).value = sales[i].vat_percent;
-                    }
-                    document.getElementById('vat_value' + a).value = sales[i].vat_value;
-                    document.getElementById('total_price' + a).value = sales[i].total_price;
-                    document.getElementById('total_discount' + a).value = sales[i].total_discount;
-                    document.getElementById('all_discount' + a).value = sales[i].all_discount;
-
-
-
-                    count = count + 1;
-                }
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-
-    }
+   
 
     function addInputField(t) {
         // if (count < 11) {
         document.getElementById('myRow' + count).style.display = 'table-row';
-        getActiveStore(0, count);
         getActiveProduct(0, count)
         count = count + 1;
 
@@ -909,8 +554,6 @@ echo "</script>";
 
         if (name === "product") {
             document.getElementById('qty' + item).value = "";
-            document.getElementById('avqty' + item).value = "";
-            document.getElementById('unit' + item).value = "";
             document.getElementById('product_rate' + item).value = "";
             document.getElementById('discount' + item).value = "";
             document.getElementById('discount_value' + item).value = "";
@@ -919,72 +562,16 @@ echo "</script>";
             document.getElementById('total_price' + item).value = "";
             document.getElementById('total_discount' + item).value = "";
             document.getElementById('all_discount' + item).value = "";
-            var $storeDropdown = $('#store' + item);
-            $storeDropdown.empty();
-            document.getElementById('avqty' + item).value = "";
             document.getElementById('qty' + item).value = "";
-            getStoresDropdown(stores, item);
-            $.ajax({
-                url: $('#base_url').val() + 'stock/stock/getproduct',
-                type: 'POST',
-                data: {
-                    prodid: document.getElementById('product' + item).value.toString(),
-                },
-                success: function(response) {
-                    let product = JSON.parse(response);
+            document.getElementById('product_rate' + item).value =services.find(s => s.service_id ===  document.getElementById('product' + item).value).charge;
 
-                    getActiveStore(product[0].store, item);
-                    avStock(item);
-
-                    document.getElementById('unit' + item).value = product[0].unit;
-                    document.getElementById('product_rate' + item).value = product[0].price;
-
-                    if (vtinfo.ischecked == 1) {
-                        document.getElementById('vat_percent' + item).value = product[0].product_vat;
-                    }
-                    //document.getElementById('vat_value' + item).value = 0;
-
-
-
-                },
-                error: function(error) {
-                    console.log(error)
-                }
-            });
-        }
-
-
-        if (name === "store") {
-
-
-            avStock(item)
-        }
-    }
-
-    function avStock(item) {
-        document.getElementById('avqty' + item).value = "";
-        document.getElementById('qty' + item).value = "";
-        $.ajax({
-            url: $('#base_url').val() + 'stock/stock/avg_avstock',
-            type: 'POST',
-            data: {
-                prodid: document.getElementById('product' + item).value.toString(),
-                storeid: document.getElementById('store' + item).value.toString(),
-                type2: type2
-            },
-            success: function(response) {
-                let stock = JSON.parse(response);
-
-
-                document.getElementById('avqty' + item).value = stock[0].avgqty == null ? 0 : stock[0].avgqty;
-
-
-            },
-            error: function(error) {
-                console.log(error)
+            if (vtinfo.ischecked == 1) {
+                document.getElementById('vat_percent' + item).value = services.find(s => s.service_id ===  document.getElementById('product' + item).value).service_vat;
             }
-        });
+        }
     }
+
+   
 
     function deleteRow(num) {
         document.getElementById('myRow' + num).style.display = 'none';
@@ -1160,8 +747,8 @@ echo "</script>";
         $productDropdown.empty();
         $productDropdown.append('<option value="" disabled selected>Select Product</option>'); // Add default option
 
-        $.each(products, function(index, product) {
-            $productDropdown.append('<option value="' + product.id + '">' + product.product_name + '</option>');
+        $.each(services, function(index, product) {
+            $productDropdown.append('<option value="' + product.service_id + '">' + product.service_name + '</option>');
         });
 
         if (productId > 0) {
@@ -1174,31 +761,9 @@ echo "</script>";
 
 
 
-    function getActiveStore(storeId, item) {
-        var $storeDropdown = $('#store' + item);
-        $storeDropdown.empty();
-        $storeDropdown.append('<option value="" disabled selected>Select store</option>'); // Add default option
+   
 
-        $.each(stores, function(index, store) {
-            $storeDropdown.append('<option value="' + store.id + '">' + store.name + '</option>');
-        });
-
-        if (storeId > 0) {
-            {
-                $storeDropdown.val(storeId)
-            }
-        }
-    }
-
-    function getStoresDropdown(stores, item) {
-        var $storeDropdown = $('#store' + item);
-        $storeDropdown.empty();
-        $storeDropdown.append('<option value="" disabled selected>Select store</option>'); // Add default option
-
-        $.each(stores, function(index, store) {
-            $storeDropdown.append('<option value="' + store.id + '">' + store.name + '</option>');
-        });
-    }
+   
 
     function getBranchDropdown(branchId) {
 
@@ -1222,7 +787,6 @@ echo "</script>";
                     $branchDropdown.append('<option value="' + branch.id + '">' + branch.name + '</option>');
                     if (branch.default != 0) {
                         $branchDropdown.val(branch.id)
-                        getSalesOrderDropdown();
                     }
                 });
 
@@ -1246,20 +810,13 @@ echo "</script>";
                 if (document.getElementById('customer_id').value == "" || document.getElementById('customer_id').value === " ") {
                     alert("Customer shouldn't be empty")
                     return
-                } else if (document.getElementById('your_dropdown_id').value == "") {
-                    alert("Payment Type shouldn't be empty")
-                    return
                 } else if (document.getElementById('branch').value == "") {
                     alert("Branch shouldn't be empty")
                     return
                 } else if (document.getElementById('product' + i).value == "") {
                     alert("Product shouldn't be empty")
                     return
-                } else if (document.getElementById('store' + i).value == "") {
-                    alert("Store shouldn't be empty")
-                    return
-
-                } else if (document.getElementById('qty' + i).value == "") {
+                }  else if (document.getElementById('qty' + i).value == "") {
                     alert("Quantity shouldn't be empty")
                     return
 
@@ -1272,9 +829,8 @@ echo "</script>";
 
 
                     arrItem.push({
-                        product: document.getElementById('product' + i).value,
+                        service: document.getElementById('product' + i).value,
                         product_name: dropdown.options[dropdown.selectedIndex].text,
-                        store: document.getElementById('store' + i).value,
                         quantity: document.getElementById('qty' + i).value,
                         product_rate: document.getElementById('product_rate' + i).value ? document.getElementById('product_rate' + i).value : "0",
                         discount: document.getElementById('discount' + i).value ? document.getElementById('discount' + i).value : "0",
@@ -1290,18 +846,17 @@ echo "</script>";
 
         }
 
-        var paymentdropdown = document.getElementById('your_dropdown_id');
         $("#save_add").hide();
 
-        if (id > 0&& pagetype == "") {
+        if (id > 0) {
             $.ajax({
-                url: $('#base_url').val() + 'invoice/invoice/update_sale',
+                url: $('#base_url').val() + 'service/service/update_serviceorder',
                 type: 'POST',
                 data: {
                     id: id,
                     items: arrItem,
                     discount: document.getElementById('discount').value,
-                    type2: type2,
+                    type2: "C",
                     total_discount_ammount: document.getElementById('total_discount_ammount').value,
                     total_vat_amnt: document.getElementById('total_vat_amnt').value,
                     grandTotal: document.getElementById('grandTotal').value,
@@ -1310,9 +865,6 @@ echo "</script>";
                     total: document.getElementById('Total').value,
                     customer_id: document.getElementById('customer_id').value,
                     employee_id: document.getElementById('employee_id').value,
-                    payment_type: document.getElementById('your_dropdown_id').value,
-                    payment: paymentdropdown.options[paymentdropdown.selectedIndex].text,
-                    incidenttype: document.getElementById('incidenttype').value,
                     branch: document.getElementById('branch').value
 
                 },
@@ -1324,7 +876,7 @@ echo "</script>";
                     clearDetails()
                     $("#save_add").show();
 
-                    alert("Invoice Details Updated Successfully")
+                    alert("Job Order Details Updated Successfully")
                     printRawHtml(datas.details);
 
 
@@ -1339,11 +891,11 @@ echo "</script>";
             // console.log(arrItem)
 
             $.ajax({
-                url: $('#base_url').val() + 'invoice/invoice/save_sale',
+                url: $('#base_url').val() + 'service/service/save_service_order',
                 type: 'POST',
                 data: {
                     items: arrItem,
-                    type2: type2,
+                    type2: "C",
                     discount: document.getElementById('discount').value,
                     total_discount_ammount: document.getElementById('total_discount_ammount').value,
                     total_vat_amnt: document.getElementById('total_vat_amnt').value,
@@ -1352,12 +904,8 @@ echo "</script>";
                     details: document.getElementById('details').value,
                     total: document.getElementById('Total').value,
                     customer_id: document.getElementById('customer_id').value,
-                    payment_type: document.getElementById('your_dropdown_id').value,
-                    payment: paymentdropdown.options[paymentdropdown.selectedIndex].text,
                     employee_id: document.getElementById('employee_id').value,
-                    incidenttype: document.getElementById('incidenttype').value,
                     branch: document.getElementById('branch').value,
-                    sales_order_no: pagetype == "convert"?document.getElementById('sales_order_no_convert').value:document.getElementById('sales_order_no').value,
 
 
 
@@ -1367,7 +915,7 @@ echo "</script>";
                     clearDetails()
                     $("#save_add").show();
 
-                    alert("Invoice Details saved Successfully")
+                    alert("Job Order Details saved Successfully")
                     printRawHtml(datas.details);
                 },
                 error: function(error) {
@@ -1391,22 +939,12 @@ echo "</script>";
             $productDropdown.empty();
             $productDropdown.append('<option value="" disabled selected>Select Product</option>'); // Add default option
 
-            $.each(products, function(index, product) {
-                $productDropdown.append('<option value="' + product.id + '">' + product.product_name + '</option>');
+            $.each(services, function(index, product) {
+                $productDropdown.append('<option value="' + product.service_id + '">' + product.service_name + '</option>');
             });
 
-            var $storeDropdown = $('#store' + i);
-            $storeDropdown.empty();
-            $storeDropdown.append('<option value="" disabled selected>Select store</option>'); // Add default option
-
-            $.each(stores, function(index, store) {
-                $storeDropdown.append('<option value="' + store.id + '">' + store.name + '</option>');
-            });
-
+          
             document.getElementById('myRow' + i).style.display = 'none';
-            document.getElementById('qty' + i).value = "";
-            document.getElementById('avqty' + i).value = "";
-            document.getElementById('unit' + i).value = "";
 
             document.getElementById('product_rate' + i).value = "";
             document.getElementById('discount' + i).value = "";
@@ -1428,20 +966,12 @@ echo "</script>";
         document.getElementById('details').value = ""
         document.getElementById('Total').value = ""
         document.getElementById('customer_id').value = ""
-        document.getElementById('your_dropdown_id').value = ""
 
         var $customerDropdown = $('#customer_id');
         $customerDropdown.empty();
         $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
         $.each(customers, function(index, customer) {
             $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
-        });
-
-        var $paymentDropdown = $('#your_dropdown_id');
-        $paymentDropdown.empty();
-        $paymentDropdown.append('<option value="" disabled selected>Select Supplier</option>'); // Add default option
-        $.each(pmethods, function(index, supplier) {
-            $paymentDropdown.append('<option value="' + supplier.id + '">' + supplier.name + '</option>');
         });
     }
 

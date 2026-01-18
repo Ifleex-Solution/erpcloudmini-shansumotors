@@ -1,278 +1,439 @@
-<script src="<?php echo base_url() ?>my-assets/js/admin_js/json/service.js.php"></script>
-<!-- service Invoice js -->
-<script src="<?php echo base_url() ?>my-assets/js/admin_js/service.js" type="text/javascript"></script>
+<script src="<?php echo base_url() ?>my-assets/js/admin_js/purchase.js" type="text/javascript"></script>
 
+
+<style>
+    .col-big {
+        width: 20% !important;
+    }
+
+    .col-total {
+        width: 20% !important;
+    }
+
+    .col-medium {
+        width: 11% !important;
+    }
+
+    .col-medium2 {
+        width: 15% !important;
+    }
+
+    .vathidden {
+        width: 8% !important;
+    }
+
+    .col-small {
+        width: 7% !important;
+    }
+</style>
 <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-bd lobidrag">
-            <div class="panel-heading">
+            <div class="panel-heading" id="style12">
                 <div class="panel-title">
-                    <h4><?php echo display('service_invoice') ?></h4>
+                    <h4 id="title"><?php echo $title; ?></h4>
                 </div>
             </div>
-            <?php echo form_open_multipart('service/service/insert_service_invoice', array('class' => 'form-vertical', 'id' => '', 'name' => '')) ?>
+
             <div class="panel-body">
-                <div class="row">
-                    <div class="col-sm-4" id="payment_from_1">
-                        <div class="form-group row">
-                            <label for="customer_name" class="col-sm-4 col-form-label"><?php
-                                                                                        echo display('customer_name')
-                                                                                        ?> <i class="text-danger">*</i></label>
-                            <div class="col-sm-8">
 
-                                <select name="customer_id" class="form-control" id="cmbCode" required>
-                                    <option value="">Select Bank</option>
-                                    <?php foreach ($customer_dropdown as $customer) {
-                                        echo $customer->customer_id; ?>
-                                        <option value="<?php echo $customer->customer_id; ?>"><?php echo $customer->customer_name; ?></option>
 
-                                    <?php  }   ?>
-                                </select>
-                                <!-- // if($this->permission1->method('add_customer','create')->access()) -->
-                                <!-- <div class=" col-sm-3">
-                                <a href="#" class="client-add-btn btn btn-success" aria-hidden="true"
-                                    data-toggle="modal" data-target="#cust_info"><i class="ti-plus m-r-2"></i></a>
-                            </div> -->
-                                <!-- }   -->
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
 
-                    <div class="col-sm-4">
-                        <div class="form-group row">
-                            <label for="employee" class="col-sm-4 col-form-label"><?php
-                                                                                    echo display('employee');
-                                                                                    ?></label>
-                            <div class="col-sm-8">
-                                <select name="employee_id[]" class="form-control" multiple="multiple">
-                                    <option value=""> select One</option>
-                                    <?php foreach ($employee_list as $employee) { ?>
-                                        <option value="<?php echo $employee['id'] ?>">
-                                            <?php echo $employee['first_name'] . ' ' . $employee['last_name'] ?></option>
-                                    <?php } ?>
 
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4" id="payment_from_2">
+
+                    <div class="col-sm-6">
                         <div class="form-group row">
-                            <label for="customer_name_others"
-                                class="col-sm-3 col-form-label"><?php echo display('customer_name') ?> <i
-                                    class="text-danger">*</i></label>
+                            <label for="date" class="col-sm-4 col-form-label">Service Date
+                                <i class="text-danger">*</i>
+                            </label>
                             <div class="col-sm-6">
-                                <input autofill="off" type="text" size="100" name="customer_name_others"
-                                    placeholder='<?php echo display('customer_name') ?>' id="customer_name_others"
-                                    class="form-control" />
-                            </div>
-
-                            <div class="col-sm-3">
-                                <input onClick="active_customer('payment_from_2')" type="button" id="myRadioButton_2"
-                                    class="checkbox_account btn btn-success" name="customer_confirm_others"
-                                    value="<?php echo display('old_customer') ?>">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="customer_name_others_address"
-                                class="col-sm-3 col-form-label"><?php echo display('customer_mobile') ?> </label>
-                            <div class="col-sm-6">
-                                <input type="text" size="100" name="customer_mobile" class=" form-control"
-                                    placeholder='<?php echo display('customer_mobile') ?>'
-                                    id="customer_name_others_mobile" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="customer_name_others_address"
-                                class="col-sm-3 col-form-label"><?php echo display('address') ?> </label>
-                            <div class="col-sm-6">
-                                <input type="text" size="100" name="customer_name_others_address" class=" form-control"
-                                    placeholder='<?php echo display('address') ?>' id="customer_name_others_address" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group row">
-                            <label for="date" class="col-sm-4 col-form-label"><?php echo display('hanging_over') ?> <i
-                                    class="text-danger">*</i></label>
-                            <div class="col-sm-8">
                                 <?php
                                 date_default_timezone_set('Asia/Colombo');
 
-                                $date = date('Y-m-d');
-                                ?>
-                                <input class="datepicker form-control" type="text" size="50" name="invoice_date"
-                                    id="date" required value="<?php echo $date; ?>" tabindex="6" />
+                                $date = date('Y-m-d'); ?>
+                                <input type="text" required tabindex="2" class="form-control datepicker" name="sale_date" value="<?php echo $date; ?>" id="date" />
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="supplier_sss" class="col-sm-4 col-form-label">Branch
+                                <i class="text-danger">*</i>
+                            </label>
+                            <div class="col-sm-6">
+                                <select class="form-control" id="branch" required name="branch" tabindex="3" onchange="getSalesOrderDropdown()">
+
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6" id="showorderno">
+                        <div class="form-group row">
+                            <label for="supplier_sss" class="col-sm-4 col-form-label">Service Order No
+                            </label>
+                            <div class="col-sm-6">
+                                <select class="form-control" id="sales_order_no" required name="sales_order_no" tabindex="3" onchange="getSalesOrderDetails()">
+
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6" id="showorderno2">
+                        <div class="form-group row">
+                            <label for="supplier_sss" class="col-sm-4 col-form-label">Service Order No
+                            </label>
+                            <div class="col-sm-6">
+                                <input type="hidden" tabindex="2" class="form-control" value="" id="sales_order_no_convert"  />
+                                <input type="text" tabindex="2" class="form-control" value="" id="sales_order_no1" readonly />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="supplier_sss" class="col-sm-4 col-form-label">Customer
+                                <i class="text-danger">*</i>
+                            </label>
+                            <div class="col-sm-6">
+                                <select name="customer_id" id="customer_id" class="form-control " required="" tabindex="1">
+                                    <option value="">Select an option</option>
+                                    <?php foreach ($all_customer as $customer) { ?>
+                                        <option value="<?php echo $customer['customer_id'] ?>">
+                                            <?php echo $customer['customer_name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <?php if ($this->permission1->method('add_customer', 'create')->access()) { ?>
+                                <div class=" col-sm-1">
+                                    <a href="<?php echo base_url('add_customer'); ?>" class="client-add-btn btn btn-success" aria-hidden="true">
+                                        <i class="fa fa-user"></i></a>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="supplier_sss" class="col-sm-4 col-form-label">Employee
+                            </label>
+                            <div class="col-sm-6">
+                                <select name="employee_id" id="employee_id" class="form-control " tabindex="1">
+                                    <option value="">Select an option</option>
+                                    <?php foreach ($all_employee as $employee) { ?>
+                                        <option value="<?php echo $employee['id'] ?>">
+                                            <?php echo $employee['first_name'] . " " . $employee['last_name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="adress" class="col-sm-4 col-form-label"><?php echo display('details') ?>
+                            </label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" tabindex="4" id="details" name="sale_details" placeholder=" <?php echo display('details') ?>" rows="1"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                 </div>
 
+                <div class="row">
+
+
+                </div>
+
+
+                <br>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover" id="normalinvoice">
+                    <table class="table table-bordered table-hover" id="saleTable">
                         <thead>
                             <tr>
-                                <th class="text-center product_field"><?php echo display('service_name') ?> <i
+                                <th class="text-center  col-big">Service<i
                                         class="text-danger">*</i></th>
-                                <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i>
-                                </th>
-                                <th class="text-center "><?php echo display('charge') ?> <i class="text-danger">*</i>
-                                </th>
 
-                                <?php if ($discount_type == 1) { ?>
-                                    <th class="text-center "><?php echo display('discount_percentage') ?> %</th>
-                                <?php } elseif ($discount_type == 2) { ?>
-                                    <th class="text-center"><?php echo display('discount') ?> </th>
-                                <?php } elseif ($discount_type == 3) { ?>
-                                    <th class="text-center"><?php echo display('fixed_dis') ?> </th>
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <th class="text-center col-medium">Qty<i
+                                            class="text-danger">*</i></th>
+                                <?php } else { ?>
+                                    <th class="text-center col-medium2">Qty<i
+                                            class="text-danger">*</i></th>
                                 <?php } ?>
-                                <th class="text-center "><?php echo display('dis_val') ?> </th>
-                                <th class="text-center "><?php echo display('vat') . ' %' ?> </th>
-                                <th class="text-center "><?php echo display('vat_val') ?> </th>
-                                <th class="text-center"><?php echo display('total') ?>
-                                </th>
-                                <th class="text-center"><?php echo display('action') ?></th>
+
+
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <th class="text-center col-medium">Price val <i
+                                            class="text-danger"> *</i></th>
+                                <?php } else { ?>
+                                    <th class="text-center col-medium2">Price val <i
+                                            class="text-danger"> *</i></th>
+                                <?php } ?>
+
+
+
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <th class="text-center col-medium">Discount</th>
+                                    <th class="text-center col-medium">Dis.val</th>
+                                <?php } else { ?>
+                                    <th class="text-center col-medium2">Discount</th>
+                                    <th class="text-center col-medium2">Dis.val</th>
+                                <?php } ?>
+
+
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <th class="text-center col-medium">VAT </th>
+                                    <th class="text-center col-medium">VAT.val</th>
+                                <?php } else { ?>
+
+                                <?php } ?>
+
+
+
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <th class="text-center col-medium">Total</th>
+
+                                <?php } else { ?>
+                                    <th class="text-center col-medium2">Total</th>
+
+                                <?php } ?>
+
+                                <th class="text-center col-medium"><?php echo display('action') ?></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="addinvoiceItem">
-                            <tr>
+                            <tr id="myRow1">
                                 <td class="product_field">
 
-                                    <select name="service_name[]" class="form-control" id="service_name_1" onchange="getProduct(1)" required>
-                                        <option value="">Select Bank</option>
-                                        <?php foreach ($service_list as $services) {
-                                            echo $services['service_id']; ?>
-                                            <option value="<?php echo $services['service_id']; ?>"><?php echo $services['service_name']; ?></option>
-
-                                        <?php  }   ?>
+                                    <select name="product[]" class="form-control" id="product1" tabindex="1" onchange="product_search(1, 'product')">
+                                        <option value="">Select Product</option>
+                                        <?php foreach ($services as $service) { ?>
+                                            <option value="<?php echo $service['service_id']; ?>"><?php echo $service['service_name']; ?></option>
+                                        <?php } ?>
                                     </select>
 
 
                                 </td>
 
-                                <td>
-                                    <input type="text" name="product_quantity[]" onkeyup="quantity_calculate(1);"
-                                        onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right"
-                                        id="total_qntt_1" placeholder="0.00" value="1" min="0" tabindex="8"
-                                        required="required" />
-                                </td>
-                                <td class="invoice_fields">
-                                    <input type="text" name="product_rate[]" id="price_item_1"
-                                        class="price_item1 price_item form-control text-right" tabindex="9" required=""
-                                        onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"
-                                        placeholder="0.00" min="0" />
-                                </td>
-                                <!-- Discount -->
-                                <td>
-                                    <input type="text" name="discount[]" onkeyup="quantity_calculate(1);"
-                                        onchange="quantity_calculate(1);" id="discount_1"
-                                        class="form-control text-right" min="0" tabindex="10" placeholder="0.00" />
-                                    <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type"
-                                        id="discount_type_1">
-                                </td>
-
-                                <td>
-                                    <input type="text" name="discountvalue[]" id="discount_value_1"
-                                        class="form-control text-right" min="0" tabindex="18" placeholder="0.00"
-                                        readonly />
-                                </td>
-
-                                <!-- VAT  -->
-                                <td>
-                                    <input type="text" name="vatpercent[]" onkeyup="quantity_calculate(1);"
-                                        onchange="quantity_calculate(1);" id="vat_percent_1"
-                                        class="form-control text-right" min="0" tabindex="19" placeholder="0.00" />
-
-                                </td>
-                                <td>
-                                    <input type="text" name="vatvalue[]" id="vat_value_1"
-                                        class="form-control text-right total_vatamnt" min="0" tabindex="20"
-                                        placeholder="0.00" readonly />
-                                </td>
-                                <!-- VAT end -->
 
 
-                                <td class="invoice_fields">
-                                    <input class="total_price form-control text-right" type="text" name="total_price[]"
-                                        id="total_price_1" value="0.00" readonly="readonly" />
+
+                                <td class="qty">
+                                    <input type="text" name="product_quantity[]" id="qty1" min="0" class="form-control text-right store_cal_1" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" placeholder="0.00" value="" tabindex="6" />
+                                </td>
+                                <td class="rate">
+                                    <input type="text" name="product_rate[]" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" id="product_rate1" class="form-control product_rate_1 text-right" placeholder="0.00" value="" min="0" tabindex="7" />
+                                </td>
+
+                                <td class="qty">
+                                    <input type="text" name="discount_per[]" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" id="discount1" class="form-control discount_1 text-right" min="0" tabindex="11" placeholder="0.00" />
+                                    <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type">
+
+                                </td>
+                                <td class="rate">
+                                    <input type="text" name="discountvalue[]" id="discount_value1" class="form-control text-right discount_value_1 total_discount_val" min="0" tabindex="12" placeholder="0.00" readonly />
+                                </td>
+
+                                <!-- VAT  start-->
+
+
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <td class="qty">
+                                        <input type="text" name="vatpercent[]" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" id="vat_percent1" class="form-control vat_percent_1 text-right" min="0" tabindex="13" placeholder="0.00" />
+                                    </td>
+                                    <td class="rate">
+                                        <input type="text" name="vatvalue[]" id="vat_value1" class="form-control vat_value1 text-right total_vatamnt" min="0" tabindex="14" placeholder="0.00" readonly />
+                                    </td>
+                                <?php } else { ?>
+                                    <input type="hidden" class="form-control" name="vat" id="vat_percent1" value="0.0">
+                                    <input type="hidden" class="form-control" name="vat" id="vat_value1" value="0.0">
+
+                                <?php } ?>
+
+                                <!-- VAT  end-->
+                                <td class="product_field">
+                                    <input class="form-control total_price text-right total_price_1" type="text" name="total_price[]" id="total_price1" value="0.00" readonly="readonly" />
+
+                                    <input type="hidden" id="total_discount1" class="" />
+                                    <input type="hidden" id="all_discount1" class="total_discount dppr" name="discount_amount[]" />
                                 </td>
 
                                 <td>
-
-
-                                    <!-- Discount calculate start-->
-                                    <input type="hidden" id="total_discount_1" class="" />
-                                    <input type="hidden" id="all_discount_1" class="total_discount dppr"
-                                        name="discount_amount[]" />
-
                                 </td>
+
                             </tr>
+
+                            <?php
+                            for ($i = 2; $i <= 20; $i++) {
+                            ?>
+                                <tr id="myRow<?php echo $i; ?>">
+                                    <td class="product_field">
+                                        <select name="product[]" class="form-control" id="product<?php echo $i; ?>" tabindex="1" onchange="product_search(<?php echo $i; ?>, 'product')">
+                                            <option value="">Select Product</option>
+                                            <?php foreach ($services as $service) { ?>
+                                                <option value="<?php echo $service['service_id']; ?>"><?php echo $service['service_name']; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </td>
+
+
+
+
+
+                                    <td class="qty">
+                                        <input type="text" name="product_quantity[]" id="qty<?php echo $i; ?>" min="0" class="form-control text-right store_cal_1" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" placeholder="0.00" value="" tabindex="6" />
+                                    </td>
+
+                                    <td class="rate">
+                                        <input type="text" name="product_rate[]" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" id="product_rate<?php echo $i; ?>" class="form-control product_rate_1 text-right" placeholder="0.00" value="" min="0" tabindex="7" />
+                                    </td>
+
+                                    <td class="qty">
+                                        <input type="text" name="discount_per[]" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" id="discount<?php echo $i; ?>" class="form-control discount_1 text-right" min="0" tabindex="11" placeholder="0.00" />
+                                        <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type">
+                                    </td>
+
+                                    <td class="rate">
+                                        <input type="text" name="discountvalue[]" id="discount_value<?php echo $i; ?>" class="form-control text-right discount_value_1 total_discount_val" min="0" tabindex="12" placeholder="0.00" readonly />
+                                    </td>
+
+                                    <!-- VAT start -->
+                                    <?php if ($vtinfo->ischecked == 1) { ?>
+                                        <td class="qty">
+                                            <input type="text" name="vatpercent[]" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" id="vat_percent<?php echo $i; ?>" class="form-control vat_percent_1 text-right" min="0" tabindex="13" placeholder="0.00" />
+                                        </td>
+                                        <td class="rate">
+                                            <input type="text" name="vatvalue[]" id="vat_value<?php echo $i; ?>" class="form-control vat_value1 text-right total_vatamnt" min="0" tabindex="14" placeholder="0.00" readonly />
+                                        </td>
+                                    <?php } else { ?>
+                                        <input type="hidden" class="form-control" name="vat" id="vat_percent<?php echo $i; ?>" value="0.0">
+                                        <input type="hidden" class="form-control" name="vat" id="vat_value<?php echo $i; ?>" value="0.0">
+
+                                    <?php } ?>
+                                    <!-- VAT end -->
+
+                                    <td class="product_field">
+                                        <input class="form-control total_price text-right total_price_1" type="text" name="total_price[]" id="total_price<?php echo $i; ?>" value="0.00" readonly="readonly" />
+                                        <input type="hidden" id="total_discount<?php echo $i; ?>" class="" />
+                                        <input type="hidden" id="all_discount<?php echo $i; ?>" class="total_discount dppr" name="discount_amount[]" />
+                                    </td>
+
+                                    <td>
+                                        <button class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(<?php echo $i; ?>)'>
+                                            <i class='fa fa-trash'></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php
+                            }
+                            ?>
+
                         </tbody>
                         <tfoot>
-
                             <tr>
-                                <td colspan="6" rowspan="2">
-                                    <center><label for="details"
-                                            class="  col-form-label text-center"><?php echo display('invoice_details') ?></label>
-                                    </center>
-                                    <textarea name="inva_details" class="form-control"
-                                        placeholder="<?php echo display('invoice_details') ?>"></textarea>
-                                </td>
-                                <td class="text-right" colspan="1"><b><?php echo display('service_discount') ?>:</b>
-                                </td>
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <td class="text-right" colspan="7"><b><?php echo display('total') ?>:</b></td>
+
+                                <?php } else { ?>
+                                    <td class="text-right" colspan="5"><b><?php echo display('total') ?>:</b></td>
+
+                                <?php } ?>
                                 <td class="text-right">
-                                    <input type="text" onkeyup="quantity_calculate(1);"
-                                        onchange="quantity_calculate(1);" id="invoice_discount"
-                                        class="form-control total_discount text-right" name="invoice_discount"
-                                        placeholder="0.00" />
-                                    <input type="hidden" id="txfieldnum">
+                                    <input type="text" id="Total" class="text-right form-control" name="total" value="0.00" readonly="readonly" />
                                 </td>
-                                <td><button type="button" id="add_invoice_item" class="btn btn-info"
-                                        name="add-invoice-item" onClick="addInputField('addinvoiceItem');"><i
-                                            class='fa fa-plus'></i></button>
-                                    <input type="hidden" name="" id="discount_type" value="<?php echo $discount_type ?>">
+                                <td> <button type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item"
+                                        onClick="addInputField('addinvoiceItem');" tabindex="9"><i class="fa fa-plus"></i></button>
+
+                                    <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
                                 </td>
                             </tr>
+                            <tr>
+
+
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <td class="text-right" colspan="7"><b>Service Discount:</b>
+                                    </td>
+                                <?php } else { ?>
+                                    <td class="text-right" colspan="5"><b>Service Discount:</b>
+                                    </td>
+                                <?php } ?>
+                                <td class="text-right">
+                                    <input type="text" id="discount" class="text-right form-control discount total_discount_val" onkeyup="calculate_sum(1)" name="discount" placeholder="0.00" value="" />
+                                </td>
+
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <td class="text-right" colspan="7"><b><?php echo display('total_discount') ?>:</b></td>
+
+                                <?php } else { ?>
+                                    <td class="text-right" colspan="5"><b><?php echo display('total_discount') ?>:</b></td>
+
+                                <?php } ?>
+                                <td class="text-right">
+                                    <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
+                                </td>
+                                <td> </td>
+
+                            </tr>
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <tr>
+
+                                    <td class="text-right" colspan="7"><b><?php echo display('ttl_val') ?>:</b></td>
+
+                                    <td class="text-right">
+                                        <input type="text" id="total_vat_amnt" class="form-control text-right" name="total_vat_amnt" value="0.00" readonly="readonly" />
+                                    </td>
+                                    <td> </td>
+
+                                </tr>
+                            <?php } else {  ?>
+                                <input type="hidden" class="form-control" name="vat" id="total_vat_amnt" value="0.0">
+                            <?php } ?>
 
 
                             <tr>
 
-                                <td class="text-right" colspan="1"><b><?php echo display('total_discount') ?>:</b></td>
+                                <?php if ($vtinfo->ischecked == 1) { ?>
+                                    <td class="text-right" colspan="7"><b><?php echo display('grand_total') ?>:</b></td>
+
+                                <?php } else { ?>
+                                    <td class="text-right" colspan="5"><b><?php echo display('grand_total') ?>:</b></td>
+
+                                <?php } ?>
                                 <td class="text-right">
-                                    <input type="text" id="total_discount_ammount" class="form-control text-right"
-                                        name="total_discount" value="0.00" readonly="readonly" />
+                                    <input type="text" id="grandTotal" class="text-right form-control grandTotalamnt" name="grand_total_price" placeholder="0.00" value="00" readonly />
                                 </td>
-
-
+                                <td> </td>
                             </tr>
-                            <tr>
-                                <td class="text-right" colspan="7"><b><?php echo display('ttl_val') ?>:</b></td>
-                                <td class="text-right">
-                                    <input type="text" id="total_vat_amnt" class="form-control text-right"
-                                        name="total_vat_amnt" value="0.00" readonly="readonly" />
-                                </td>
-                            </tr>
-
-
-
-                            <tr>
-                                <td colspan="7" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
-                                <td class="text-right">
-                                    <input type="text" id="grandTotal" class="form-control text-right grandTotalamnt"
-                                        name="grand_total_price" value="0.00" readonly="readonly" />
-                                </td>
-                            </tr>
-
 
                         </tfoot>
                     </table>
-                    <p hidden id="old-amount"><?php echo 0; ?></p>
+                    <input type="hidden" name="finyear" value="<?php echo financial_year(); ?>">
                     <p hidden id="pay-amount"></p>
                     <p hidden id="change-amount"></p>
                     <div class="col-sm-3 table-bordered p-20">
@@ -293,501 +454,793 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="form-group row text-right">
                     <div class="col-sm-12 p-20">
-                        <input type="submit" id="add_invoice1" class="btn btn-success" name="add-invoice"
-                            value="<?php echo display('submit') ?>" tabindex="17" />
-
+                        <button id="save_add" class="btn btn-success" name="add-invoice" onclick="save()">
+                            <?php
+                            echo empty($id)
+                                ? display('save')
+                                : (empty($pagetype) ? display('update') : display('save'));
+                            ?></button>
                     </div>
                 </div>
             </div>
-            <?php echo form_close() ?>
         </div>
-    </div>
 
+    </div>
 </div>
 
+<?php
+echo "<script>";
+echo "let id = " . json_encode($id) . ";";
+echo "let services=" . json_encode($service_list) . ";";
+echo "let customers=" . json_encode($all_customer) . ";";
+echo "let employees=" . json_encode($all_employee) . ";";
+echo "let usertype=" . json_encode($this->session->userdata('user_level2')) . ";";
+echo "let pagetype=" . json_encode($pagetype) . ";";
+
+echo "let pmethods=" . json_encode($all_pmethod) . ";";
+echo "let vtinfo=" . json_encode($vtinfo) . ";";
+echo "</script>";
+?>
 <script>
-    function myFunction(count) {
-        var elementById = document.getElementById("price_item_3");
-        elementById.value = 45;
+    $('body').addClass("sidebar-mini sidebar-collapse");
+
+    let type2 = ""
+    if (usertype == 3) {
+        document.getElementById('style12').style.backgroundColor = '#E0E0E0';
+        const title = document.getElementById('title');
+        title.style.color = 'blue';
+        type2 = "B"
+
+    } else {
+        type2 = "A"
 
     }
-    "use strict";
-    var service_list = [];
-    var countStringBuilder = [];
-    countStringBuilder.push(1);
+    let count = 2
+    getActiveProduct(0, 1)
+
+
+    document.getElementById("showorderno2").style.display = "none";
+
+
+    $(document).ready(function() {
+        for (let j = 2; j <= 20; j++) {
+            document.getElementById('myRow' + j).style.display = 'none';
+        }
+
+
+
+        if (id != null) {
+            
+            if (pagetype == "") {
+
+                $.ajax({
+                    url: $('#base_url').val() + 'service/service/getServiceById',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        type2: type2
+                    },
+                    success: function(response) {
+                        
+                        var sales = JSON.parse(response);
+                        document.getElementById('date').value = sales[0].date;
+                        document.getElementById('details').value = sales[0].details;
+
+                        getBranchDropdown(sales[0].branch);
+
+                        document.getElementById("showorderno").style.display = "none";
+                        document.getElementById("showorderno2").style.display = "block";
+                        document.getElementById('sales_order_no1').value = sales[0].service_order_id;
+
+
+
+
+                        var $customerDropdown = $('#customer_id');
+                        $customerDropdown.empty();
+                        $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
+                        $.each(customers, function(index, customer) {
+                            $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
+                        });
+                        $customerDropdown.val(sales[0].customer_id)
+
+                        var $employeeDropdown = $('#employee_id');
+                        $employeeDropdown.empty();
+                        $employeeDropdown.append('<option value="" disabled selected>Select Employee</option>'); // Add default option
+                        $.each(employees, function(index, employee) {
+                            $employeeDropdown.append('<option value="' + employee.id + '">' + employee.first_name + " " + employee.last_name + '</option>');
+                        });
+                        $employeeDropdown.val(sales[0].employee_id)
+
+                        var $paymentDropdown = $('#your_dropdown_id');
+                        $paymentDropdown.empty();
+                        $paymentDropdown.append('<option value="" disabled selected>Select Supplier</option>'); // Add default option
+                        $.each(pmethods, function(index, supplier) {
+                            $paymentDropdown.append('<option value="' + supplier.id + '">' + supplier.name + '</option>');
+                        });
+                        $paymentDropdown.val(sales[0].payment_type)
+
+
+                        document.getElementById('total_discount_ammount').value = sales[0].total_discount_ammount;
+                        document.getElementById('total_vat_amnt').value = sales[0].total_vat_amnt;
+                        document.getElementById('grandTotal').value = sales[0].grandTotal;
+                        document.getElementById('Total').value = sales[0].total;
+                        document.getElementById('discount').value = sales[0].discount;
+
+                        // count = 1;
+                        for (let i = 0; i < sales.length; i++) {
+                            let a = i + 1;
+                            document.getElementById('myRow' + a).style.display = 'table-row';
+                            getActiveProduct(sales[i].service, a);
+
+                            document.getElementById('qty' + a).value = sales[i].quantity;
+                            document.getElementById('product_rate' + a).value = sales[i].product_rate;
+                            document.getElementById('discount' + a).value = sales[i].discount2;
+                            document.getElementById('discount_value' + a).value = sales[i].discount_value;
+
+                            if (vtinfo.ischecked == 1) {
+                                document.getElementById('vat_percent' + a).value = sales[i].vat_percent;
+                            }
+                            document.getElementById('vat_value' + a).value = sales[i].vat_value;
+                            document.getElementById('total_price' + a).value = sales[i].total_price;
+                            document.getElementById('total_discount' + a).value = sales[i].total_discount;
+                            document.getElementById('all_discount' + a).value = sales[i].all_discount;
+
+
+
+                            count = count + 1;
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }else if (pagetype == "convert") {
+                getSalesOrderDetailsconvert(id)
+            }
+        } else {
+            getBranchDropdown(0);
+            getSalesOrderDropdown();
+
+        }
+    });
+
+     function getSalesOrderDetailsconvert(id) {
+        clearDetails()
+
+        $.ajax({
+            url: $('#base_url').val() + 'service/service/getServiceOrderById',
+            type: 'POST',
+            data: {
+                id: id,
+                type2: "C"
+            },
+            success: function(response) {
+                var sales = JSON.parse(response);
+                
+                getBranchDropdown(sales[0].branch);
+                document.getElementById("showorderno").style.display = "none";
+                document.getElementById("showorderno2").style.display = "block";
+                document.getElementById('sales_order_no_convert').value=id
+                document.getElementById('sales_order_no1').value = sales[0].service_order_id;
+
+                document.getElementById('date').value = sales[0].date;
+                document.getElementById('details').value = sales[0].details;
+
+
+                var $customerDropdown = $('#customer_id');
+                $customerDropdown.empty();
+                $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
+                $.each(customers, function(index, customer) {
+                    $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
+                });
+                $customerDropdown.val(sales[0].customer_id)
+
+                var $employeeDropdown = $('#employee_id');
+                $employeeDropdown.empty();
+                $employeeDropdown.append('<option value="" disabled selected>Select Employee</option>'); // Add default option
+                $.each(employees, function(index, employee) {
+                    $employeeDropdown.append('<option value="' + employee.id + '">' + employee.first_name + " " + employee.last_name + '</option>');
+                });
+                $employeeDropdown.val(sales[0].employee_id)
+
+
+                document.getElementById('total_discount_ammount').value = sales[0].total_discount_ammount;
+                document.getElementById('total_vat_amnt').value = sales[0].total_vat_amnt;
+                document.getElementById('grandTotal').value = sales[0].grandTotal;
+                document.getElementById('Total').value = sales[0].total;
+                document.getElementById('discount').value = sales[0].discount;
+
+                // count = 1;
+                for (let i = 0; i < sales.length; i++) {
+                    let a = i + 1;
+                    document.getElementById('myRow' + a).style.display = 'table-row';
+                    getActiveProduct(sales[i].service, a);
+
+                    document.getElementById('qty' + a).value = sales[i].quantity;
+                    document.getElementById('product_rate' + a).value = sales[i].product_rate;
+                    document.getElementById('discount' + a).value = sales[i].discount2;
+                    document.getElementById('discount_value' + a).value = sales[i].discount_value;
+
+                    if (vtinfo.ischecked == 1) {
+                        document.getElementById('vat_percent' + a).value = sales[i].vat_percent;
+                    }
+                    document.getElementById('vat_value' + a).value = sales[i].vat_value;
+                    document.getElementById('total_price' + a).value = sales[i].total_price;
+                    document.getElementById('total_discount' + a).value = sales[i].total_discount;
+                    document.getElementById('all_discount' + a).value = sales[i].all_discount;
+
+
+
+                    count = count + 1;
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
+    }
+
+    function getSalesOrderDropdown() {
+        var base_url = $('#base_url').val();
+
+        $.ajax({
+            type: "post",
+            url: base_url + "service/service/getservicesorderidbybranch",
+            data: {
+                type2: type2,
+                branch: document.getElementById("branch").value
+            },
+            success: function(data) {
+
+                var salesorder = JSON.parse(data);
+                console.log(salesorder)
+                var $branchDropdown = $('#sales_order_no');
+                $branchDropdown.empty();
+                $branchDropdown.append('<option value="" disabled selected>Select Sales Order</option>'); // Add default option
+
+                $.each(salesorder, function(index, branch) {
+                    $branchDropdown.append('<option value="' + branch.id + '">' + branch.service_order_id + '</option>');
+
+                });
+
+
+
+
+            }
+        });
+    }
+
+    function getSalesOrderDetails() {
+        clearDetails()
+
+        $.ajax({
+            url: $('#base_url').val() + 'service/service/getServiceOrderById',
+            type: 'POST',
+            data: {
+                id: document.getElementById('sales_order_no').value,
+                type2: "C"
+            },
+            success: function(response) {
+                var sales = JSON.parse(response);
+                document.getElementById('date').value = sales[0].date;
+                document.getElementById('details').value = sales[0].details;
+
+                var $customerDropdown = $('#customer_id');
+                $customerDropdown.empty();
+                $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
+                $.each(customers, function(index, customer) {
+                    $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
+                });
+                $customerDropdown.val(sales[0].customer_id)
+
+                var $employeeDropdown = $('#employee_id');
+                $employeeDropdown.empty();
+                $employeeDropdown.append('<option value="" disabled selected>Select Employee</option>'); // Add default option
+                $.each(employees, function(index, employee) {
+                    $employeeDropdown.append('<option value="' + employee.id + '">' + employee.first_name + " " + employee.last_name + '</option>');
+                });
+                $employeeDropdown.val(sales[0].employee_id)
+
+
+                document.getElementById('total_discount_ammount').value = sales[0].total_discount_ammount;
+                document.getElementById('total_vat_amnt').value = sales[0].total_vat_amnt;
+                document.getElementById('grandTotal').value = sales[0].grandTotal;
+                document.getElementById('Total').value = sales[0].total;
+                document.getElementById('discount').value = sales[0].discount;
+
+                // count = 1;
+                for (let i = 0; i < sales.length; i++) {
+                    let a = i + 1;
+                    document.getElementById('myRow' + a).style.display = 'table-row';
+                    getActiveProduct(sales[i].service, a);
+
+                    document.getElementById('qty' + a).value = sales[i].quantity;
+                    document.getElementById('product_rate' + a).value = sales[i].product_rate;
+                    document.getElementById('discount' + a).value = sales[i].discount2;
+                    document.getElementById('discount_value' + a).value = sales[i].discount_value;
+
+                    if (vtinfo.ischecked == 1) {
+                        document.getElementById('vat_percent' + a).value = sales[i].vat_percent;
+                    }
+                    document.getElementById('vat_value' + a).value = sales[i].vat_value;
+                    document.getElementById('total_price' + a).value = sales[i].total_price;
+                    document.getElementById('total_discount' + a).value = sales[i].total_discount;
+                    document.getElementById('all_discount' + a).value = sales[i].all_discount;
+
+
+
+                    count = count + 1;
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
+    }
 
     function addInputField(t) {
-    var row = $("#normalinvoice tbody tr").length;
-    var count = row + 1;
-       var tab1 = 0;
-       var tab2 = 0;
-       var tab3 = 0;
-       var tab4 = 0;
-       var tab5 = 0;
-       var tab6 = 0;
-       var tab7 = 0;
-       var tab8 = 0;
-       var tab9 = 0;
-       var tab10 = 0;
-       var tab11 = 0;
-       var tab12 = 0;
-    var limits = 500;
-    var taxnumber = $("#txfieldnum").val();
-    var tbfild ='';
-    for(var i=0;i<taxnumber;i++){
-        var taxincrefield = '<input id="total_tax'+i+'_'+count+'" class="total_tax'+i+'_'+count+'" type="hidden"><input id="all_tax'+i+'_'+count+'" class="total_tax'+i+'" type="hidden" name="tax[]">';
-         tbfild +=taxincrefield;
+        // if (count < 11) {
+        document.getElementById('myRow' + count).style.display = 'table-row';
+        getActiveProduct(0, count)
+        count = count + 1;
+
     }
-    if (count == limits)
-        alert("You have reached the limit of adding " + count + " inputs");
-    else {
-        var a = "service_name" + count,
-                tabindex = count * 5,
-                e = document.createElement("tr");
-        tab1 = tabindex + 1;
-        tab2 = tabindex + 2;
-        tab3 = tabindex + 3;
-        tab4 = tabindex + 4;
-        tab5 = tabindex + 5;
-        tab6 = tabindex + 6;
-        tab7 = tabindex + 7;
-        tab8 = tabindex + 8;
-        tab9 = tabindex + 9;
-        tab10 = tabindex + 10;
-        tab11 = tabindex + 11;
-        tab12 = tabindex + 12;
-        
 
-       // console.log(echo $service_list);
-       var stringBuilder = [];
-        $(document).ready(function(){
-            $.ajax({
-                url: 'service/service/getservice_list', // PHP script to fetch data
-                type: 'GET',
-                success: function(response) {
-                    serviceList=JSON.parse(response);
-                 
-                   
-        //  "<td><input type='text' name='service_name' onkeypress='invoice_serviceList(" + count + 
-        // ");' class='form-control serviceSelection common_product' placeholder='Service Name' id='" + a + 
-        // "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  service_id_" + count + 
-        // "' name='service_id[]' id='SchoolHiddenId'/></td> "+
+    function product_search(item, name) {
 
-        var countA=count-1;
+        if (name === "product") {
+            document.getElementById('qty' + item).value = "";
+            document.getElementById('product_rate' + item).value = "";
+            document.getElementById('discount' + item).value = "";
+            document.getElementById('discount_value' + item).value = "";
+            document.getElementById('vat_percent' + item).value = "";
+            document.getElementById('vat_value' + item).value = "";
+            document.getElementById('total_price' + item).value = "";
+            document.getElementById('total_discount' + item).value = "";
+            document.getElementById('all_discount' + item).value = "";
+            document.getElementById('qty' + item).value = "";
+            document.getElementById('product_rate' + item).value = services.find(s => s.service_id === document.getElementById('product' + item).value).charge;
 
-        countStringBuilder.push(count);
-        console.log(countStringBuilder);
-
-        stringBuilder.push(
-                "<td>" +
-                    "<select name='service_name[]' class='form-control' id='service_name_" + count +
-                    "' onchange='getProduct(" + count + ")' required>" +
-                        "<option value=''>Select Option</option>"
-            );
-
-            for (var service of serviceList) {
-                stringBuilder.push(
-                    "<option value='" + service.service_id + "'>" + service.service_name + "</option>"
-                );
+            if (vtinfo.ischecked == 1) {
+                document.getElementById('vat_percent' + item).value = services.find(s => s.service_id === document.getElementById('product' + item).value).service_vat;
             }
-
-       stringBuilder.push("</select></td><td><input type='text' name='product_quantity[]' required='required' onkeyup='quantity_calculate(" + count + 
-        ");' onchange='quantity_calculate(" + count + ");' id='total_qntt_" + count + "'value='1' class='common_qnt total_qntt_" + count + 
-        " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab2 + "'/></td><td><input type='text' name='product_rate[]' onkeyup='quantity_calculate(" + count + 
-        ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + 
-        " form-control text-right' required placeholder='0.00' min='0' tabindex='" + tab3 + "'/></td><td><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + 
-        ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab4 + 
-        "' /> <input type='hidden' value='' name='discount_type' id='discount_type_" + count + 
-        "' ></td><td><input type='text' name='discountvalue[]' readonly id='discount_value_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab10 + 
-        "' /></td><td><input type='text' name='vatpercent[]' onkeyup='quantity_calculate(" + count + 
-        ");' onchange='quantity_calculate(" + count + ");' id='vat_percent_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab11 + 
-        "' /></td><td><input type='text' name='vatvalue[]' id='vat_value_" + count + "' class='form-control text-right total_vatamnt common_discount' readonly placeholder='0.00' min='0' tabindex='" + tab12 + 
-        "' /></td><td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + 
-        "' value='0.00' readonly='readonly'/></td><td>"+tbfild+"<input type='hidden'  id='total_discount_" + count + "' /><input type='hidden' id='all_discount_" + count + 
-        "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + 
-        "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>");
-              
-        e.innerHTML = stringBuilder.join("");
-        document.getElementById(t).appendChild(e),
-                document.getElementById(a).focus(),
-                document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
-        document.getElementById("paidAmount").setAttribute("tabindex", tab7);
-        document.getElementById("add_invoice").setAttribute("tabindex", tab9);
-
-                },
-                error:function(error){
-                    console.log(error)
-                }
-            });
-        });
-
-     
-       console.log(countStringBuilder)
-        count++
+        }
     }
-}
 
 
-    "use strict";
 
-    function quantity_calculate(item) {
-        var serviceLists = [];
-        $(document).ready(function() {
+    function deleteRow(num) {
+        document.getElementById('myRow' + num).style.display = 'none';
+
+        document.getElementById('qty' + num).value = 0;
+        document.getElementById('product_rate' + num).value = 0;
+        document.getElementById('discount' + num).value = 0;
+        document.getElementById('discount_value' + num).value = 0;
+        document.getElementById('vat_percent' + num).value = 0;
+        document.getElementById('vat_value' + num).value = 0;
+        document.getElementById('total_price' + num).value = 0;
+        document.getElementById('total_discount' + num).value = 0;
+        document.getElementById('all_discount' + num).value = 0;
+        calculate_sum(num)
+    }
+
+
+
+    function calculate_sum(sl) {
+
+        var p = 0;
+        var v = 0;
+        var gr_tot = 0;
+        var dis = 0;
+        var item_ctn_qty = $("#qty" + sl).val();
+        var vendor_rate = $("#product_rate" + sl).val();
+
+        var total_price = item_ctn_qty * vendor_rate;
+        $("#total_price" + sl).val(total_price.toFixed(2));
+
+        var quantity = $("#qty" + sl).val();
+        var discount = $("#discount" + sl).val();
+        var dis_type = $("#discount_type").val();
+        var price_item = $("#product_rate" + sl).val();
+        var vat_percent = $("#vat_percent" + sl).val();
+        var avqty = $("#avqty" + sl).val();
+
+
+        if (parseInt(quantity) > parseInt(avqty)) {
+            $("#qty" + sl).val("");
+            alert("Quantity shouldn't be greater than available quantity");
+            return;
+        }
+
+        if (quantity > 0 || discount > 0 || vat_percent > 0) {
+            if (dis_type == 1) {
+                var price = quantity * price_item;
+                var disc = +(price * discount / 100);
+                $("#discount_value" + sl).val(disc);
+                $("#all_discount" + sl).val(disc);
+                //Total price calculate per product
+                var temp = price - disc;
+                // product wise vat start
+                var vat = +(temp * vat_percent / 100);
+                $("#vat_value" + sl).val(vat);
+                // product wise vat end
+                var ttletax = 0;
+                $("#total_price" + sl).val(temp);
+
+
+
+            } else if (dis_type == 2) {
+                var price = quantity * price_item;
+
+                // Discount cal per product
+                var disc = (discount * quantity);
+                $("#discount_value" + sl).val(disc);
+                $("#all_discount" + sl).val(disc);
+
+                //Total price calculate per product
+                var temp = price - disc;
+                $("#total_price" + sl).val(temp);
+                // product wise vat start
+                var vat = +(temp * vat_percent / 100);
+                $("#vat_value" + sl).val(vat);
+                // product wise vat end
+
+                var ttletax = 0;
+
+            } else if (dis_type == 3) {
+                var total_price = quantity * price_item;
+                var disc = discount;
+                // Discount cal per product
+                $("#discount_value" + sl).val(disc);
+                $("#all_discount" + sl).val(disc);
+                //Total price calculate per product
+                var price = total_price - disc;
+                $("#total_price" + sl).val(price);
+                // product wise vat start
+                var vat = +(price * vat_percent / 100);
+                $("#vat_value" + sl).val(vat);
+                // product wise vat end
+
+                $("#total_price" + sl).val(price);
+
+
+                var ttletax = 0;
+
+            }
+        }
+
+        //Total Price
+        $(".total_price").each(function() {
+            isNaN(this.value) || 0 == this.value.length || (gr_tot += parseFloat(this.value))
+        });
+        $(".discount").each(function() {
+            isNaN(this.value) || 0 == this.value.length || (dis += parseFloat(this.value))
+        });
+        //Total Discount
+        $(".total_discount_val").each(function() {
+                isNaN(this.value) || 0 == this.value.length || (p += parseFloat(this.value))
+            }),
+            $("#total_discount_ammount").val(p.toFixed(2, 2)),
+
+            $(".total_vatamnt").each(function() {
+                isNaN(this.value) || 0 == this.value.length || (v += parseFloat(this.value))
+            }),
+            $("#total_vat_amnt").val(v.toFixed(2, 2)),
+
+            $("#Total").val(gr_tot.toFixed(2, 2));
+        var vatamnt = $("#total_vat_amnt").val();
+
+        var gttl = gr_tot - dis;
+        var grandtotal = parseFloat(gttl) + parseFloat(vatamnt);
+        $("#grandTotal").val(grandtotal.toFixed(2, 2));
+        // $("#pamount_by_method").val(grandtotal.toFixed(2, 2));
+
+        // $('#paidAmount').val(grandtotal.toFixed(2, 2));
+
+        var purchase_edit_page = $("#purchase_edit_page").val();
+        $("#add_new_payment").empty();
+
+        $("#pay-amount").text('0');
+        //   $("#dueAmmount").val(0);
+
+        if (purchase_edit_page == 1) {
+
+            var base_url = $('#base_url').val();
+            var is_credit_edit = $('#is_credit_edit').val();
+
+            var csrf_test_name = $('[name="csrf_test_name"]').val();
+            var gtotal = $(".grandTotalamnt").val();
+            var url = base_url + "purchase/purchase/bdtask_showpaymentmodal";
             $.ajax({
-                url: 'service/service/getservice_list', // PHP script to fetch data
-                type: 'GET',
-                success: function(response) {
-                    serviceLists = JSON.parse(response);
-                    var quantity = $("#total_qntt_" + item).val();
-
-                    var service = serviceLists.find(obj => obj.service_id === $("#service_name_" + item).val());
-
-                    // if( $("#price_item_" + item).val()===""){
-                    //     $("#price_item_" + item).val(service.charge);
-
-                    // }
-
-                    // if( $("#vat_percent_" + item).val()===""){
-                    //     $("#vat_percent_" + item).val(service.service_vat);
-                    // }
-                    var price_item = $("#price_item_" + item).val();
-                    var invoice_discount = $("#invoice_discount").val();
-                    var discount = $("#discount_" + item).val();
-                    var vat_percent = $("#vat_percent_" + item).val();
-                    var taxnumber = $("#txfieldnum").val();
-                    var total_discount = $("#total_discount_" + item).val();
-                    var dis_type = $("#discount_type").val();
-
-
-                    if (quantity > 0 || discount > 0 || vat_percent > 0) {
-                        if (dis_type == 1) {
-                            var price = quantity * price_item;
-
-                            // Discount cal per product
-                            var dis = +(price * discount / 100);
-
-                            $("#discount_value_" + item).val(dis);
-                            $("#all_discount_" + item).val(dis);
-
-                            //Total price calculate per product
-                            var temp = price - dis;
-                            // product wise vat start
-                            var vat = +(temp * vat_percent / 100);
-                            $("#vat_value_" + item).val(vat);
-                            // product wise vat end
-                            var ttletax = 0;
-                            $("#total_price_" + item).val(temp);
-                            for (var i = 0; i < taxnumber; i++) {
-                                var tax = (temp) * $("#total_tax" + i + "_" + item).val();
-                                ttletax += Number(tax);
-                                $("#all_tax" + i + "_" + item).val(tax);
-
-                            }
-
-
-                        } else if (dis_type == 2) {
-                            var price = quantity * price_item;
-
-                            // Discount cal per product
-                            var dis = (discount * quantity);
-                            $("#discount_value_" + item).val(dis);
-                            $("#all_discount_" + item).val(dis);
-
-                            //Total price calculate per product
-                            var temp = price - dis;
-                            $("#total_price_" + item).val(temp);
-
-                            // product wise vat start
-                            var vat = +(temp * vat_percent / 100);
-                            $("#vat_value_" + item).val(vat);
-                            // product wise vat end
-                            var ttletax = 0;
-                            for (var i = 0; i < taxnumber; i++) {
-                                var tax = (temp) * $("#total_tax" + i + "_" + item).val();
-                                ttletax += Number(tax);
-                                $("#all_tax" + i + "_" + item).val(tax);
-                            }
-                        } else if (dis_type == 3) {
-                            var total_price = quantity * price_item;
-
-
-                            // Discount cal per product
-                            $("#discount_value_" + item).val(discount);
-                            $("#all_discount_" + item).val(discount);
-                            //Total price calculate per product
-                            var price = (total_price - discount);
-                            $("#total_price_" + item).val(price);
-
-                            // product wise vat start
-                            var vat = +(price * vat_percent / 100);
-                            $("#vat_value_" + item).val(vat);
-                            // product wise vat end
-                            var ttletax = 0;
-                            for (var i = 0; i < taxnumber; i++) {
-                                var tax = (price) * $("#total_tax" + i + "_" + item).val();
-                                ttletax += Number(tax);
-                                $("#all_tax" + i + "_" + item).val(tax);
-                            }
-                        }
-                    } else {
-                        var n = quantity * price_item;
-                        var c = quantity * price_item;
-                        $("#total_price_" + item).val(n),
-                            $("#all_tax_" + item).val(c)
-                    }
-                    calculateSum1();
-                    // invoice_paidamount();
-
-                    var invoice_edit_page = $("#invoice_edit_page").val();
-                    var preload_pay_view = $("#preload_pay_view").val();
-                    var is_credit_edit = $('#is_credit_edit').val();
-
-                    $("#add_new_payment").empty();
-
-                    $("#pay-amount").text('0');
-                    $("#dueAmmount").val(0);
-                    if (invoice_edit_page == 1) {
-                        var base_url = $('#base_url').val();
-                        var csrf_test_name = $('[name="csrf_test_name"]').val();
-                        var gtotal = $(".grandTotalamnt").val();
-                        var url = base_url + "service/service/bdtask_showpaymentmodal";
-                        $.ajax({
-                            type: "post",
-                            url: url,
-                            data: {
-                                is_credit_edit: is_credit_edit,
-                                csrf_test_name: csrf_test_name
-                            },
-                            success: function(data) {
-
-                                $($('#add_new_payment').append(data));
-
-                                $("#pamount_by_method").val(gtotal);
-                                $("#preload_pay_view").val('1');
-                                $("#add_new_payment_type").prop('disabled', false);
-                                var card_typesl = $('.card_typesl').val();
-                                if (card_typesl == 0) {
-                                    $("#add_new_payment_type").prop('disabled', true);
-                                }
-                            }
-                        });
-
-                    }
-
+                type: "post",
+                url: url,
+                data: {
+                    is_credit_edit: is_credit_edit,
+                    csrf_test_name: csrf_test_name
                 },
-                error: function(error) {
-                    console.log(error)
+                success: function(data) {
+
+
+                    $('#add_new_payment').append(data);
+
+                    //  $("#pamount_by_method").val(gtotal);
+                    $("#add_new_payment_type").prop('disabled', false);
+                    var card_typesl = $('.card_typesl').val();
+
+                    if (card_typesl == 0) {
+                        $("#add_new_payment_type").prop('disabled', true);
+                    }
+
                 }
             });
-        });
-
-
-    }
-
-    function getProduct(item) {
-        var serviceLists = [];
-        $(document).ready(function() {
-            $.ajax({
-                url: 'service/service/getservice_list', // PHP script to fetch data
-                type: 'GET',
-                success: function(response) {
-                    serviceLists = JSON.parse(response);
-                    var quantity = $("#total_qntt_" + item).val();
-
-                    var service = serviceLists.find(obj => obj.service_id === $("#service_name_" + item).val());
-
-                    $("#price_item_" + item).val(service.charge);
-
-                    $("#vat_percent_" + item).val(service.service_vat);
-                    var price_item = $("#price_item_" + item).val();
-                    var invoice_discount = $("#invoice_discount").val();
-                    var discount = $("#discount_" + item).val();
-                    var vat_percent = $("#vat_percent_" + item).val();
-                    var taxnumber = $("#txfieldnum").val();
-                    var total_discount = $("#total_discount_" + item).val();
-                    var dis_type = $("#discount_type").val();
-
-
-
-                    if (quantity > 0 || discount > 0 || vat_percent > 0) {
-                        if (dis_type == 1) {
-                            var price = quantity * price_item;
-
-                            // Discount cal per product
-                            var dis = +(price * discount / 100);
-
-                            $("#discount_value_" + item).val(dis);
-                            $("#all_discount_" + item).val(dis);
-
-                            //Total price calculate per product
-                            var temp = price - dis;
-                            // product wise vat start
-                            var vat = +(temp * vat_percent / 100);
-                            $("#vat_value_" + item).val(vat);
-                            // product wise vat end
-                            var ttletax = 0;
-                            $("#total_price_" + item).val(temp);
-                            for (var i = 0; i < taxnumber; i++) {
-                                var tax = (temp) * $("#total_tax" + i + "_" + item).val();
-                                ttletax += Number(tax);
-                                $("#all_tax" + i + "_" + item).val(tax);
-
-                            }
-
-
-                        } else if (dis_type == 2) {
-                            var price = quantity * price_item;
-
-                            // Discount cal per product
-                            var dis = (discount * quantity);
-                            $("#discount_value_" + item).val(dis);
-                            $("#all_discount_" + item).val(dis);
-
-                            //Total price calculate per product
-                            var temp = price - dis;
-                            $("#total_price_" + item).val(temp);
-
-                            // product wise vat start
-                            var vat = +(temp * vat_percent / 100);
-                            $("#vat_value_" + item).val(vat);
-                            // product wise vat end
-                            var ttletax = 0;
-                            for (var i = 0; i < taxnumber; i++) {
-                                var tax = (temp) * $("#total_tax" + i + "_" + item).val();
-                                ttletax += Number(tax);
-                                $("#all_tax" + i + "_" + item).val(tax);
-                            }
-                        } else if (dis_type == 3) {
-                            var total_price = quantity * price_item;
-
-
-                            // Discount cal per product
-                            $("#discount_value_" + item).val(discount);
-                            $("#all_discount_" + item).val(discount);
-                            //Total price calculate per product
-                            var price = (total_price - discount);
-                            $("#total_price_" + item).val(price);
-
-                            // product wise vat start
-                            var vat = +(price * vat_percent / 100);
-                            $("#vat_value_" + item).val(vat);
-                            // product wise vat end
-                            var ttletax = 0;
-                            for (var i = 0; i < taxnumber; i++) {
-                                var tax = (price) * $("#total_tax" + i + "_" + item).val();
-                                ttletax += Number(tax);
-                                $("#all_tax" + i + "_" + item).val(tax);
-                            }
-                        }
-                    } else {
-                        var n = quantity * price_item;
-                        var c = quantity * price_item;
-                        $("#total_price_" + item).val(n),
-                            $("#all_tax_" + item).val(c)
-                    }
-                    calculateSum1();
-                    // invoice_paidamount();
-
-                    var invoice_edit_page = $("#invoice_edit_page").val();
-                    var preload_pay_view = $("#preload_pay_view").val();
-                    var is_credit_edit = $('#is_credit_edit').val();
-
-                    $("#add_new_payment").empty();
-
-                },
-                error: function(error) {
-                    console.log(error)
-                }
-            });
-        });
-
-
-    }
-
-
-    "use strict";
-
-    function calculateSum1() {
-
-        var taxnumber = $("#txfieldnum").val();
-
-        var t = 0,
-            a = 0,
-            e = 0,
-            o = 0,
-            p = 0,
-            f = 0,
-            v = 0,
-            ad = 0,
-            ds = 0;
-        // s_cost = $("#shipping_cost").val();
-
-        //Total Tax
-        for (var i = 0; i < taxnumber; i++) {
-
-            var j = 0;
-            $(".total_tax" + i).each(function() {
-                isNaN(this.value) || 0 == this.value.length || (j += parseFloat(this.value))
-            });
-            $("#total_tax_ammount" + i).val(j.toFixed(2, 2));
 
         }
 
-        //Discount part
-        var p = 0,
-            v = 0,
-            f = 0,
-            t = 0;
+    }
 
-        // TOTAL DISCOUNT
-        $(".total_discount").each(function() {
-            let val = parseFloat($(this).val());
-            if (!isNaN(val)) p += val;
+    function getActiveProduct(productId, item) {
+        var $productDropdown = $('#product' + item);
+        $productDropdown.empty();
+        $productDropdown.append('<option value="" disabled selected>Select Product</option>'); // Add default option
+
+        $.each(services, function(index, product) {
+            $productDropdown.append('<option value="' + product.service_id + '">' + product.service_name + '</option>');
         });
-        $("#total_discount_ammount").val(p.toFixed(2));
 
-        // TOTAL VAT
-        $(".total_vatamnt").each(function() {
-            let val = parseFloat($(this).val());
-            if (!isNaN(val)) v += val;
+        if (productId > 0) {
+            {
+                $productDropdown.val(productId)
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+    function getBranchDropdown(branchId) {
+
+        var base_url = $('#base_url').val();
+
+        $.ajax({
+            type: "post",
+            url: base_url + "store/store/getbranchbyuserid",
+            data: {
+                // is_credit_edit: is_credit_edit,
+                // csrf_test_name: csrf_test_name
+            },
+            success: function(data) {
+                var branches = JSON.parse(data);
+                console.log(branches)
+                var $branchDropdown = $('#branch');
+                $branchDropdown.empty();
+                $branchDropdown.append('<option value="" disabled selected>Select Branch</option>'); // Add default option
+
+                $.each(branches, function(index, branch) {
+                    $branchDropdown.append('<option value="' + branch.id + '">' + branch.name + '</option>');
+                    if (branch.default != 0) {
+                        $branchDropdown.val(branch.id)
+                        getSalesOrderDropdown();
+                    }
+                });
+
+                if (branchId > 0) {
+                    {
+                        $branchDropdown.val(branchId)
+                    }
+                }
+
+
+
+            }
         });
-        $("#total_vat_amnt").val(v.toFixed(2));
+    }
 
-        // TOTAL TAX
-        $(".totalTax").each(function() {
-            let val = parseFloat($(this).val());
-            if (!isNaN(val)) f += val;
+
+    function save() {
+        arrItem = [];
+        for (let i = 1; i < count; i++) {
+            if (document.getElementById('myRow' + i).style.display != "none") {
+                if (document.getElementById('customer_id').value == "" || document.getElementById('customer_id').value === " ") {
+                    alert("Customer shouldn't be empty")
+                    return
+                } else if (document.getElementById('your_dropdown_id').value == "") {
+                    alert("Payment Type shouldn't be empty")
+                    return
+                } else if (document.getElementById('branch').value == "") {
+                    alert("Branch shouldn't be empty")
+                    return
+                } else if (document.getElementById('product' + i).value == "") {
+                    alert("Product shouldn't be empty")
+                    return
+                } else if (document.getElementById('qty' + i).value == "") {
+                    alert("Quantity shouldn't be empty")
+                    return
+
+                } else
+                if (document.getElementById('product_rate' + i).value == "") {
+                    alert("Price shouldn't be empty")
+                    return
+                } else {
+                    var dropdown = document.getElementById('product' + i);
+
+
+                    arrItem.push({
+                        service: document.getElementById('product' + i).value,
+                        product_name: dropdown.options[dropdown.selectedIndex].text,
+                        quantity: document.getElementById('qty' + i).value,
+                        product_rate: document.getElementById('product_rate' + i).value ? document.getElementById('product_rate' + i).value : "0",
+                        discount: document.getElementById('discount' + i).value ? document.getElementById('discount' + i).value : "0",
+                        discount_value: document.getElementById('discount_value' + i).value ? document.getElementById('discount_value' + i).value : "0",
+                        vat_percent: document.getElementById('vat_percent' + i).value ? document.getElementById('vat_percent' + i).value : "0",
+                        vat_value: document.getElementById('vat_value' + i).value ? document.getElementById('vat_value' + i).value : "0",
+                        total_price: document.getElementById('total_price' + i).value ? document.getElementById('total_price' + i).value : "0",
+                        total_discount: document.getElementById('total_discount' + i).value ? document.getElementById('total_discount' + i).value : "0",
+                        all_discount: document.getElementById('all_discount' + i).value ? document.getElementById('all_discount' + i).value : "0",
+                    });
+                }
+            }
+
+        }
+
+        var paymentdropdown = document.getElementById('your_dropdown_id');
+        $("#save_add").hide();
+
+        if (id > 0&& pagetype == "") {
+            $.ajax({
+                url: $('#base_url').val() + 'service/service/update_service',
+                type: 'POST',
+                data: {
+                    id: id,
+                    items: arrItem,
+                    discount: document.getElementById('discount').value,
+                    type2: type2,
+                    total_discount_ammount: document.getElementById('total_discount_ammount').value,
+                    total_vat_amnt: document.getElementById('total_vat_amnt').value,
+                    grandTotal: document.getElementById('grandTotal').value,
+                    date: document.getElementById('date').value,
+                    details: document.getElementById('details').value,
+                    total: document.getElementById('Total').value,
+                    customer_id: document.getElementById('customer_id').value,
+                    employee_id: document.getElementById('employee_id').value,
+                    payment_type: document.getElementById('your_dropdown_id').value,
+                    payment: paymentdropdown.options[paymentdropdown.selectedIndex].text,
+                    branch: document.getElementById('branch').value
+
+                },
+                success: function(response) {
+                    // alert("Invoice Details Updated Successfully")
+                    // window.location.href = $('#base_url').val() + 'invoice_list';
+
+                    datas = JSON.parse(response);
+                    clearDetails()
+                    $("#save_add").show();
+
+                    alert("Service Details Updated Successfully")
+                    printRawHtml(datas.details);
+
+
+                },
+                error: function(error) {
+                    console.log(error)
+                }
+            });
+
+
+        } else {
+
+            $.ajax({
+                url: $('#base_url').val() + 'service/service/save_service',
+                type: 'POST',
+                data: {
+                    items: arrItem,
+                    type2: type2,
+                    discount: document.getElementById('discount').value,
+                    total_discount_ammount: document.getElementById('total_discount_ammount').value,
+                    total_vat_amnt: document.getElementById('total_vat_amnt').value,
+                    grandTotal: document.getElementById('grandTotal').value,
+                    date: document.getElementById('date').value,
+                    details: document.getElementById('details').value,
+                    total: document.getElementById('Total').value,
+                    customer_id: document.getElementById('customer_id').value,
+                    payment_type: document.getElementById('your_dropdown_id').value,
+                    payment: paymentdropdown.options[paymentdropdown.selectedIndex].text,
+                    employee_id: document.getElementById('employee_id').value,
+                    branch: document.getElementById('branch').value,
+                    service_order_no: pagetype == "convert"?document.getElementById('sales_order_no_convert').value:document.getElementById('sales_order_no').value,
+
+
+
+                },
+                success: function(response) {
+                    datas = JSON.parse(response);
+                    clearDetails()
+                    $("#save_add").show();
+
+                    alert("Service Details saved Successfully")
+                    printRawHtml(datas.details);
+                },
+                error: function(error) {
+                    console.log(error)
+                }
+            });
+
+        }
+
+
+
+
+
+
+
+    }
+
+    function clearDetails() {
+        for (let i = 1; i < 20; i++) {
+            var $productDropdown = $('#product' + i);
+            $productDropdown.empty();
+            $productDropdown.append('<option value="" disabled selected>Select Product</option>'); // Add default option
+
+            $.each(services, function(index, product) {
+                $productDropdown.append('<option value="' + product.service_id + '">' + product.service_name + '</option>');
+            });
+
+
+            document.getElementById('myRow' + i).style.display = 'none';
+
+            document.getElementById('product_rate' + i).value = "";
+            document.getElementById('discount' + i).value = "";
+            document.getElementById('discount_value' + i).value = "";
+            document.getElementById('vat_percent' + i).value = "";
+            document.getElementById('vat_value' + i).value = "";
+            document.getElementById('total_price' + i).value = "";
+            document.getElementById('total_discount' + i).value = "";
+            document.getElementById('all_discount' + i).value = "";
+
+        }
+        document.getElementById('myRow1').style.display = 'table-row';
+
+        document.getElementById('discount').value = ""
+        document.getElementById('total_discount_ammount').value = ""
+        document.getElementById('total_vat_amnt').value = ""
+        document.getElementById('grandTotal').value = ""
+        document.getElementById('date').value = ""
+        document.getElementById('details').value = ""
+        document.getElementById('Total').value = ""
+        document.getElementById('customer_id').value = ""
+        document.getElementById('your_dropdown_id').value = ""
+
+        var $customerDropdown = $('#customer_id');
+        $customerDropdown.empty();
+        $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
+        $.each(customers, function(index, customer) {
+            $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
         });
-        $("#total_tax_amount").val(f.toFixed(2));
 
-        // TOTAL PRICE
-        $(".total_price").each(function() {
-            let val = parseFloat($(this).val());
-            if (!isNaN(val)) t += val;
+        var $paymentDropdown = $('#your_dropdown_id');
+        $paymentDropdown.empty();
+        $paymentDropdown.append('<option value="" disabled selected>Select Supplier</option>'); // Add default option
+        $.each(pmethods, function(index, supplier) {
+            $paymentDropdown.append('<option value="' + supplier.id + '">' + supplier.name + '</option>');
         });
-        $("#total_price_all").val(t.toFixed(2)); // or your real field ID
+    }
 
-        $(".dppr").each(function() {
-                isNaN(this.value) || 0 == this.value.length || (ad += parseFloat(this.value))
-            }),
-            o = f.toFixed(2, 2),
-            e = t.toFixed(2, 2);
-        f = p.toFixed(2, 2);
+    function printRawHtml(view) {
 
-        var test = +o + + +e + -f + +ad;
-        $("#grandTotal").val(test.toFixed(2, 2));
 
-        var gt = $("#grandTotal").val();
-        var invdis = $("#invoice_discount").val();
-        var vatamnt = $("#total_vat_amnt").val();
-        var total_discount_ammount = $("#total_discount_ammount").val();
-        var ttl_discount = +total_discount_ammount + +invdis;
-        var grnt_totals = parseFloat(gt) + parseFloat(vatamnt);
-        $("#grandTotal").val(grnt_totals.toFixed(2, 2));
-        $('#paidAmount').val(grnt_totals.toFixed(2, 2));
-        $("#pamount_by_method").val(grnt_totals.toFixed(2, 2));
+        $(view).print({
 
+            deferred: $.Deferred().done(function() {
+                window.location.href = $('#base_url').val() + 'add_service_invoice';
+            })
+        });
     }
 </script>

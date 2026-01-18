@@ -41,6 +41,8 @@ class Invoice extends MX_Controller
         $data['store_list'] = $this->product_model->active_store();
         $data['module']      = "invoice";
         $data['page']        = "add_invoice_form";
+         $data['pagetype']        = "";
+
         $data['id'] = $id;
         if ($this->permission1->method('manage_invoice', 'create')->access()) {
             if ($id != null) {
@@ -2151,7 +2153,9 @@ class Invoice extends MX_Controller
         if ($this->input->post('sales_order_no', TRUE)) {
             $sales_order_no = $this->input->post('sales_order_no', TRUE);
 
-            $query = "UPDATE quotation SET  status = 1 WHERE id = '{$this->input->post('sales_order_no', TRUE)}';";
+            $query = "UPDATE quotation SET  status = 1,
+             type2 = AES_ENCRYPT('{$this->input->post('type2', TRUE)}', '{$encryption_key}')
+             WHERE id = '{$this->input->post('sales_order_no', TRUE)}';";
             $this->db->query($query);
         } else {
             $sales_order_no = 0;
@@ -2458,18 +2462,15 @@ class Invoice extends MX_Controller
         $encryption_key = Config::$encryption_key;
 
         $this->db->select_max("AES_DECRYPT(sale_id,'" . $encryption_key . "')", 'id');
-        $this->db->where("AES_DECRYPT(type2,'" . $encryption_key . "')", $type);
+        // $this->db->where("AES_DECRYPT(type2,'" . $encryption_key . "')", $type);
         $query      = $this->db->get('quotation');
         $result     = $query->result_array();
         $invoice_no = $result[0]['id'];
         if ($invoice_no != '') {
             $invoice_no = $invoice_no + 1;
         } else {
-            if ($type == "A") {
-                $invoice_no = 1000000001;
-            } else {
-                $invoice_no = 3000000001;
-            }
+            $invoice_no = 1000000001;
+
         }
         return $invoice_no;
     }
@@ -2551,7 +2552,9 @@ class Invoice extends MX_Controller
          po.date, 
            po.branch, 
          po.details, 
-          po.incidenttype,                    po.employee_id, 
+          po.incidenttype,    
+                    AES_DECRYPT(po.sale_id, '" . $encryption_key . "') AS sale_id, 
+          po.employee_id, 
          AES_DECRYPT(po.discount, '" . $encryption_key . "') AS discount, 
          AES_DECRYPT(po.total_discount_ammount, '" . $encryption_key . "') AS total_discount_ammount, 
          AES_DECRYPT(po.total_vat_amnt, '" . $encryption_key . "') AS total_vat_amnt, 
@@ -2926,6 +2929,7 @@ class Invoice extends MX_Controller
 
     public function delete_sale($id = null)
     {
+        $encryption_key = Config::$encryption_key;
         $lastupdate = date('Y-m-d H:i:s');
 
         $productExists = $this->db->from('gdn_stock')
@@ -2948,6 +2952,18 @@ class Invoice extends MX_Controller
             $this->db->where('pid', $id)
                 ->where('type', 'sales')
                 ->delete('phystock_details');
+            
+              $service   =   $this->db->select("quotation_id")->from('sale')->where('id',  $id)->get()->row();
+
+        
+             $query = "
+            UPDATE quotation
+            SET 
+                status = 0,
+                lastupdateddate='{$lastupdate}',
+              type2 = AES_ENCRYPT('C', '{$encryption_key}')
+                WHERE id = '{$service->quotation_id}'";
+          $this->db->query($query);
 
             $this->db->where('pid', $id)
                 ->delete('sale_details');
@@ -3071,7 +3087,7 @@ class Invoice extends MX_Controller
             'company_info'    => $company_info,
             'currency_details' => $currency_details,
             'date'    =>  $sale[0]['date'],
-            'details'    => "",
+            'details'    => $sale[0]['details'],
             'invoiceno' => $sale[0]['sale_id'],
             'payment' => ""
         );
@@ -3108,7 +3124,7 @@ class Invoice extends MX_Controller
             'company_info'    => $company_info,
             'currency_details' => $currency_details,
             'date'    =>  $sale[0]['date'],
-            'details'    => "",
+            'details'    =>  $sale[0]['details'] ,
             'invoiceno' => $sale[0]['sale_id']
         );
 
@@ -3128,7 +3144,7 @@ class Invoice extends MX_Controller
          AES_DECRYPT(discount, '" . $encryption_key . "') AS discount,
           AES_DECRYPT(total_discount_ammount, '" . $encryption_key . "') AS total_discount_ammount,
          AES_DECRYPT(total_vat_amnt, '" . $encryption_key . "') AS total_vat_amnt,customer_id,
-            AES_DECRYPT(grandTotal, '" . $encryption_key . "') AS grandTotal,date ")
+            AES_DECRYPT(grandTotal, '" . $encryption_key . "') AS grandTotal,date,details ")
             ->from('sale')
             ->where('id', $id)
             ->get()
@@ -3166,7 +3182,7 @@ class Invoice extends MX_Controller
          AES_DECRYPT(discount, '" . $encryption_key . "') AS discount,
           AES_DECRYPT(total_discount_ammount, '" . $encryption_key . "') AS total_discount_ammount,
          AES_DECRYPT(total_vat_amnt, '" . $encryption_key . "') AS total_vat_amnt,customer_id,
-            AES_DECRYPT(grandTotal, '" . $encryption_key . "') AS grandTotal,date ")
+            AES_DECRYPT(grandTotal, '" . $encryption_key . "') AS grandTotal,date,details ")
             ->from('quotation')
             ->where('id', $id)
             ->get()
@@ -3248,12 +3264,110 @@ class Invoice extends MX_Controller
 
         $salesorder_reult = $this->db->select("id,AES_DECRYPT(sale_id, '{$encryption_key}') AS sale_id")
             ->from('quotation')
-            ->where("AES_DECRYPT(type2,'" . $encryption_key . "')", $this->input->post('type2', TRUE))
             ->where("status", 0)
             ->where("branch", $this->input->post('branch', TRUE))
             ->get()
             ->result();
         echo json_encode($salesorder_reult);
     }
+
+
+      public function update_saleseorderstatuscancel($id = null)
+    {
+
+        $base_url = base_url();
+
+        date_default_timezone_set('Asia/Colombo');
+
+
+        $lastupdate = date('Y-m-d H:i:s');
+        $query = "
+    UPDATE quotation
+    SET 
+        status = 2,
+        lastupdateddate='{$lastupdate}'
+    WHERE id = '{$id}';
+";
+
+        $this->db->query($query);
+
+        $query = "
+        INSERT INTO logs (id, screen, operation, pid, userid,lastupdatedate) 
+        VALUES (
+            0, 
+            'quotation', 
+            'update', 
+            '{$id}', 
+            '{$this->session->userdata('id')}',  '{$lastupdate}'
+        );
+    ";
+
+        $this->db->query($query);
+
+
+        echo '<script type="text/javascript">
+        alert("Status Updated successfully");
+        window.location.href = "' . $base_url . 'manage_quotation";
+       </script>';
+
+    }
+
+    public function update_salesorderstatusredo($id = null)
+    {
+
+        $base_url = base_url();
+
+        date_default_timezone_set('Asia/Colombo');
+
+
+        $lastupdate = date('Y-m-d H:i:s');
+        $query = "
+    UPDATE quotation
+    SET 
+        status = 0,
+        lastupdateddate='{$lastupdate}'
+    WHERE id = '{$id}';
+";
+
+        $this->db->query($query);
+
+        $query = "
+        INSERT INTO logs (id, screen, operation, pid, userid,lastupdatedate) 
+        VALUES (
+            0, 
+            'quotation', 
+            'update', 
+            '{$id}', 
+            '{$this->session->userdata('id')}',  '{$lastupdate}'
+        );
+    ";
+
+        $this->db->query($query);
+
+        echo '<script type="text/javascript">
+        alert("Status Updated successfully");
+        window.location.href = "' . $base_url . 'manage_quotation";
+       </script>';  
+     }
+
+       function bdtask_convertsales_form($id = null)
+    {
+        $data['title']       = display('add_invoice');
+        $data['all_customer'] = $this->customer_list();
+        $data['all_employee'] = $this->employee_list();
+        $data['vtinfo']   = $this->db->select('*')->from('vat_tax_setting')->get()->row();
+        $data['all_pmethod'] = $this->pmethod_dropdown();
+        $data['products'] = $this->active_product();
+        $data['store_list'] = $this->product_model->active_store();
+        $data['module']      = "invoice";
+        $data['page']        = "add_invoice_form";
+        $data['pagetype']        = "convert";
+        $data['id'] = $id;
+        echo modules::run('template/layout', $data);
+
+       
+    }
+
+    
 
 }

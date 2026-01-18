@@ -119,26 +119,43 @@
 
 
                         </tr>
-                        <tr>
-                            <td colspan="5" style="text-align: right;font-size: 14px;padding: 5px; "><b>Sale Discount:</b></td>
+                           <tr>
+    <td colspan="3" rowspan="3"
+        style="text-align:left;
+               font-size:14px;
+               padding:5px;
+               vertical-align:middle;">
+                <?php echo $details; ?>
+    </td>
 
-                            <td style="text-align: right;font-size: 14px;padding: 5px; "> <?php echo number_format($total_dis, 2, '.', ','); ?></td>
+    <td colspan="2" style="text-align:right;font-size:14px;padding:5px;">
+        <b>Sale Discount:</b>
+    </td>
+    <td style="text-align:right;font-size:14px;padding:5px;">
+        <?php echo number_format($total_dis, 2, '.', ','); ?>
+    </td>
+</tr>
 
-                        </tr>
-                        <tr>
-                            <td colspan="5" style="text-align: right;font-size: 14px;padding: 5px; "><b>Total Discount Amount:</b></td>
+<tr>
+    <!-- DO NOT repeat the rowspan column here -->
+    <td colspan="2" style="text-align:right;font-size:14px;padding:5px;">
+        <b>Total Discount Amount:</b>
+    </td>
+    <td style="text-align:right;font-size:14px;padding:5px;">
+        <?php echo number_format($total_discount_ammount, 2, '.', ','); ?>
+    </td>
+</tr>
 
-                            <td style="text-align: right;font-size: 14px;padding: 5px; "> <?php echo number_format($total_discount_ammount, 2, '.', ','); ?></td>
-
-                        </tr>
-
-                        
-                        <tr>
-                            <td colspan="5" style="text-align: right;font: size 20px;padding: 5px;"><b>Grand Total:</b></td>
-
-                            <td style="text-align: right;font: size 20px;padding: 5px; "> <?php echo number_format($grandTotal, 2, '.', ','); ?></td>
-
-                        </tr>
+<tr>
+    <!-- DO NOT repeat the rowspan column here -->
+    <td colspan="2" style="text-align:right;font-size:20px;padding:5px;">
+        <b>Grand Total:</b>
+    </td>
+    <td style="text-align:right;font-size:20px;padding:5px;">
+        <?php echo number_format($grandTotal, 2, '.', ','); ?>
+    </td>
+</tr>
+                       
                     </table>
 
                 </div>

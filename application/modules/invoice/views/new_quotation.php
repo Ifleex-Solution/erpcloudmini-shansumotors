@@ -1,24 +1,32 @@
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/purchase.js" type="text/javascript"></script>
 
 <style>
-    .product_field {
-        width: 200px;
+    .col-big {
+        width: 15% !important;
     }
 
-    .field {
-        width: 30px;
+    .col-total {
+        width: 20% !important;
     }
 
-    .unit {
-        width: 70px;
+    .col-medium {
+        width: 10% !important;
     }
 
-    .qty {
-        width: 100px;
+    .col-medium2 {
+        width: 12% !important;
     }
 
-    .rate {
-        width: 150px;
+    .vathidden {
+        width: 8% !important;
+    }
+
+    .col-small {
+        width: 7% !important;
+    }
+
+    .col-small2 {
+        width: 9% !important;
     }
 </style>
 <div class="row">
@@ -59,7 +67,6 @@
                             <?php } ?>
                         </div>
                     </div>
-
                     <div class="col-sm-6">
                         <div class="form-group row">
                             <label for="adress" class="col-sm-4 col-form-label"><?php echo display('details') ?>
@@ -69,6 +76,13 @@
                             </div>
                         </div>
                     </div>
+
+
+
+                </div>
+
+                <div class="row">
+
                     <div class="col-sm-6">
                         <div class="form-group row">
                             <label for="date" class="col-sm-4 col-form-label">Sale Date
@@ -99,6 +113,11 @@
 
                         </div>
                     </div>
+
+                </div>
+
+                <div class="row">
+
                     <div class="col-sm-6">
                         <div class="form-group row">
                             <label for="supplier_sss" class="col-sm-4 col-form-label">Incident Type
@@ -107,7 +126,7 @@
                             <div class="col-sm-6">
                                 <select class="form-control" id="incidenttype" required name="incidenttype" tabindex="3">
                                     <option value=""></option>
-                                    <option value="1">Sales</option>
+                                    <option value="1">Retail</option>
                                     <option value="2">Wholesale</option>
 
                                 </select>
@@ -116,7 +135,7 @@
                         </div>
 
                     </div>
-
+                    
                     <div class="col-sm-6">
                         <div class="form-group row">
                             <label for="supplier_sss" class="col-sm-4 col-form-label">Branch
@@ -134,299 +153,361 @@
                     </div>
                 </div>
 
-                <div class="row">
+           
 
 
-                </div>
+
+            <br>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="saleTable">
+                    <thead>
+                        <tr>
 
 
-                <br>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover" id="saleTable">
-                        <thead>
-                            <tr>
-                                <th class="text-center product_field">Product<i
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <th class="text-center col-medium">Product<i
                                         class="text-danger">*</i></th>
-                                <th class="text-center">Store<i class="text-danger">*</i>
+                            <?php } else { ?>
+                                <th class="text-center col-medium2">Product<i
+                                        class="text-danger">*</i></th>
+                            <?php } ?>
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <th class="text-center col-small">Store<i class="text-danger">*</i>
                                 </th>
-                                <th class="text-center ">Unit </th>
-                                <th class="text-center ">Av.Qty</th>
-                                <th class="text-center ">Qty<i
+                            <?php } else { ?>
+                                <th class="text-center col-small2">Store<i class="text-danger">*</i>
+                                </th>
+                            <?php } ?>
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <th class="text-center col-small">Unit </th>
+
+                            <?php } else { ?>
+                                <th class="text-center col-small2">Unit </th>
+
+                            <?php } ?>
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <th class="text-center col-small">Av.Qty</th>
+
+                            <?php } else { ?>
+                                <th class="text-center col-small2">Av.Qty</th>
+
+                            <?php } ?>
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <th class="text-center col-small">Qty<i
                                         class="text-danger">*</i></th>
-                                <th class="text-center ">Price val <i
+
+                            <?php } else { ?>
+                                <th class="text-center col-small2">Qty<i
+                                        class="text-danger">*</i></th>
+
+                            <?php } ?>
+
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <th class="text-center col-medium">Price val <i
                                         class="text-danger"> *</i></th>
-                                <th class="text-center ">Discount</th>
-                                <th class="text-center ">Dis.val</th>
-
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <th class="text-center ">VAT </th>
-                                    <th class="text-center ">VAT.val</th>
-                                <?php } else { ?>
-
-                                <?php } ?>
+                            <?php } else { ?>
+                                <th class="text-center col-medium2">Price val <i
+                                        class="text-danger"> *</i></th>
+                            <?php } ?>
 
 
-                                <th class="text-center ">Total</th>
 
-                                <th class="text-center"><?php echo display('action') ?></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="addinvoiceItem">
-                            <tr id="myRow1">
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <th class="text-center col-medium">Discount</th>
+                                <th class="text-center col-medium">Dis.val</th>
+                            <?php } else { ?>
+                                <th class="text-center col-medium2">Discount</th>
+                                <th class="text-center col-medium2">Dis.val</th>
+                            <?php } ?>
+
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <th class="text-center col-medium">VAT </th>
+                                <th class="text-center col-medium">VAT.val</th>
+                            <?php } else { ?>
+
+                            <?php } ?>
+
+
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <th class="text-center col-medium">Total</th>
+
+                            <?php } else { ?>
+                                <th class="text-center col-medium2">Total</th>
+
+                            <?php } ?>
+                            <th class="text-center col-medium"><?php echo display('action') ?></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="addinvoiceItem">
+                        <tr id="myRow1">
+                            <td class="product_field">
+
+                                <select name="product[]" class="form-control" id="product1" tabindex="1" onchange="product_search(1,'product')">
+                                    <option value="">Select Product</option>
+                                    <?php foreach ($products as $services) {
+                                        echo $services['id']; ?>
+                                        <option value="<?php echo $services['id']; ?>"><?php echo $services['product_name']; ?></option>
+
+                                    <?php  }   ?>
+                                </select>
+
+
+                            </td>
+
+                            <td class="rate">
+                                <select class="form-control" id="store1" name="store[]" tabindex="3" onchange="product_search(1,'store')">
+                                    <option value=""></option>
+                                </select>
+                            </td>
+
+                            <td class="qty">
+                                <input type="text" name="unit[]" onkeyup="product_search(1,'unit');"
+                                    class="total_qntt_1 form-control text-right"
+                                    id="unit1" value="" min="0" readonly />
+                            </td>
+                            <td class="qty">
+                                <input type="number" name="avqty[]" onkeyup="product_search(1,'avqty');"
+                                    class="total_qntt_1 form-control text-right"
+                                    id="avqty1" placeholder="0.00" min="0" readonly />
+                            </td>
+
+
+
+                            <td class="qty">
+                                <input type="text" name="product_quantity[]" id="qty1" min="0" class="form-control text-right store_cal_1" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" placeholder="0.00" value="" tabindex="6" />
+                            </td>
+                            <td class="rate">
+                                <input type="text" name="product_rate[]" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" id="product_rate1" class="form-control product_rate_1 text-right" placeholder="0.00" value="" min="0" tabindex="7" />
+                            </td>
+
+                            <td class="qty">
+                                <input type="text" name="discount_per[]" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" id="discount1" class="form-control discount_1 text-right" min="0" tabindex="11" placeholder="0.00" />
+                                <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type">
+
+                            </td>
+                            <td class="rate">
+                                <input type="text" name="discountvalue[]" id="discount_value1" class="form-control text-right discount_value_1 total_discount_val" min="0" tabindex="12" placeholder="0.00" readonly />
+                            </td>
+
+                            <!-- VAT  start-->
+
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <td class="qty">
+                                    <input type="text" name="vatpercent[]" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" id="vat_percent1" class="form-control vat_percent_1 text-right" min="0" tabindex="13" placeholder="0.00" />
+                                </td>
+                                <td class="rate">
+                                    <input type="text" name="vatvalue[]" id="vat_value1" class="form-control vat_value1 text-right total_vatamnt" min="0" tabindex="14" placeholder="0.00" readonly />
+                                </td>
+                            <?php } else { ?>
+                                <input type="hidden" class="form-control" name="vat" id="vat_percent1" value="0.0">
+                                <input type="hidden" class="form-control" name="vat" id="vat_value1" value="0.0">
+
+                            <?php } ?>
+
+                            <!-- VAT  end-->
+                            <td class="product_field">
+                                <input class="form-control total_price text-right total_price_1" type="text" name="total_price[]" id="total_price1" value="0.00" readonly="readonly" />
+
+                                <input type="hidden" id="total_discount1" class="" />
+                                <input type="hidden" id="all_discount1" class="total_discount dppr" name="discount_amount[]" />
+                            </td>
+
+                            <td>
+                            </td>
+
+                        </tr>
+
+                        <?php
+                        for ($i = 2; $i <= 20; $i++) {
+                        ?>
+                            <tr id="myRow<?php echo $i; ?>">
                                 <td class="product_field">
-
-                                    <select name="product[]" class="form-control" id="product1" tabindex="1" onchange="product_search(1,'product')">
+                                    <select name="product[]" class="form-control" id="product<?php echo $i; ?>" tabindex="1" onchange="product_search(<?php echo $i; ?>, 'product')">
                                         <option value="">Select Product</option>
-                                        <?php foreach ($products as $services) {
-                                            echo $services['id']; ?>
+                                        <?php foreach ($products as $services) { ?>
                                             <option value="<?php echo $services['id']; ?>"><?php echo $services['product_name']; ?></option>
-
-                                        <?php  }   ?>
+                                        <?php } ?>
                                     </select>
-
-
                                 </td>
 
+
+
                                 <td class="rate">
-                                    <select class="form-control" id="store1" name="store[]" tabindex="3" onchange="product_search(1,'store')">
+                                    <select class="form-control" id="store<?php echo $i; ?>" name="store[]" tabindex="3" onchange="product_search(<?php echo $i; ?>, 'store')">
                                         <option value=""></option>
                                     </select>
                                 </td>
 
-                                <td class="qty">
-                                    <input type="text" name="unit[]" onkeyup="product_search(1,'unit');"
-                                        class="total_qntt_1 form-control text-right"
-                                        id="unit1" value="" min="0" readonly />
-                                </td>
-                                <td class="qty">
-                                    <input type="number" name="avqty[]" onkeyup="product_search(1,'avqty');"
-                                        class="total_qntt_1 form-control text-right"
-                                        id="avqty1" placeholder="0.00" min="0" readonly />
-                                </td>
-
 
 
                                 <td class="qty">
-                                    <input type="text" name="product_quantity[]" id="qty1" min="0" class="form-control text-right store_cal_1" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" placeholder="0.00" value="" tabindex="6" />
+                                    <input type="text" name="unit[]" onkeyup="product_search(<?php echo $i; ?>, 'unit');" class="total_qntt_1 form-control text-right" id="unit<?php echo $i; ?>" value="" min="0" readonly />
                                 </td>
+
+                                <td class="qty">
+                                    <input type="number" name="avqty[]" onkeyup="product_search(<?php echo $i; ?>, 'avqty');" class="total_qntt_1 form-control text-right" id="avqty<?php echo $i; ?>" placeholder="0.00" min="0" readonly />
+                                </td>
+
+                                <td class="qty">
+                                    <input type="text" name="product_quantity[]" id="qty<?php echo $i; ?>" min="0" class="form-control text-right store_cal_1" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" placeholder="0.00" value="" tabindex="6" />
+                                </td>
+
                                 <td class="rate">
-                                    <input type="text" name="product_rate[]" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" id="product_rate1" class="form-control product_rate_1 text-right" placeholder="0.00" value="" min="0" tabindex="7" />
+                                    <input type="text" name="product_rate[]" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" id="product_rate<?php echo $i; ?>" class="form-control product_rate_1 text-right" placeholder="0.00" value="" min="0" tabindex="7" />
                                 </td>
 
                                 <td class="qty">
-                                    <input type="text" name="discount_per[]" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" id="discount1" class="form-control discount_1 text-right" min="0" tabindex="11" placeholder="0.00" />
+                                    <input type="text" name="discount_per[]" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" id="discount<?php echo $i; ?>" class="form-control discount_1 text-right" min="0" tabindex="11" placeholder="0.00" />
                                     <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type">
-
                                 </td>
+
                                 <td class="rate">
-                                    <input type="text" name="discountvalue[]" id="discount_value1" class="form-control text-right discount_value_1 total_discount_val" min="0" tabindex="12" placeholder="0.00" readonly />
+                                    <input type="text" name="discountvalue[]" id="discount_value<?php echo $i; ?>" class="form-control text-right discount_value_1 total_discount_val" min="0" tabindex="12" placeholder="0.00" readonly />
                                 </td>
 
-                                <!-- VAT  start-->
-
-
+                                <!-- VAT start -->
                                 <?php if ($vtinfo->ischecked == 1) { ?>
                                     <td class="qty">
-                                        <input type="text" name="vatpercent[]" onkeyup="calculate_sum(1);" onchange="calculate_sum(1);" id="vat_percent1" class="form-control vat_percent_1 text-right" min="0" tabindex="13" placeholder="0.00" />
+                                        <input type="text" name="vatpercent[]" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" id="vat_percent<?php echo $i; ?>" class="form-control vat_percent_1 text-right" min="0" tabindex="13" placeholder="0.00" />
                                     </td>
                                     <td class="rate">
-                                        <input type="text" name="vatvalue[]" id="vat_value1" class="form-control vat_value1 text-right total_vatamnt" min="0" tabindex="14" placeholder="0.00" readonly />
+                                        <input type="text" name="vatvalue[]" id="vat_value<?php echo $i; ?>" class="form-control vat_value1 text-right total_vatamnt" min="0" tabindex="14" placeholder="0.00" readonly />
                                     </td>
                                 <?php } else { ?>
-                                    <input type="hidden" class="form-control" name="vat" id="vat_percent1" value="0.0">
-                                    <input type="hidden" class="form-control" name="vat" id="vat_value1" value="0.0">
+                                    <input type="hidden" class="form-control" name="vat" id="vat_percent<?php echo $i; ?>" value="0.0">
+                                    <input type="hidden" class="form-control" name="vat" id="vat_value<?php echo $i; ?>" value="0.0">
 
                                 <?php } ?>
+                                <!-- VAT end -->
 
-                                <!-- VAT  end-->
                                 <td class="product_field">
-                                    <input class="form-control total_price text-right total_price_1" type="text" name="total_price[]" id="total_price1" value="0.00" readonly="readonly" />
-
-                                    <input type="hidden" id="total_discount1" class="" />
-                                    <input type="hidden" id="all_discount1" class="total_discount dppr" name="discount_amount[]" />
+                                    <input class="form-control total_price text-right total_price_1" type="text" name="total_price[]" id="total_price<?php echo $i; ?>" value="0.00" readonly="readonly" />
+                                    <input type="hidden" id="total_discount<?php echo $i; ?>" class="" />
+                                    <input type="hidden" id="all_discount<?php echo $i; ?>" class="total_discount dppr" name="discount_amount[]" />
                                 </td>
 
                                 <td>
-                                </td>
-
-                            </tr>
-
-                            <?php
-                            for ($i = 2; $i <= 20; $i++) {
-                            ?>
-                                <tr id="myRow<?php echo $i; ?>">
-                                    <td class="product_field">
-                                        <select name="product[]" class="form-control" id="product<?php echo $i; ?>" tabindex="1" onchange="product_search(<?php echo $i; ?>, 'product')">
-                                            <option value="">Select Product</option>
-                                            <?php foreach ($products as $services) { ?>
-                                                <option value="<?php echo $services['id']; ?>"><?php echo $services['product_name']; ?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </td>
-
-
-
-                                    <td class="rate">
-                                        <select class="form-control" id="store<?php echo $i; ?>" name="store[]" tabindex="3" onchange="product_search(<?php echo $i; ?>, 'store')">
-                                            <option value=""></option>
-                                        </select>
-                                    </td>
-
-
-
-                                    <td class="qty">
-                                        <input type="text" name="unit[]" onkeyup="product_search(<?php echo $i; ?>, 'unit');" class="total_qntt_1 form-control text-right" id="unit<?php echo $i; ?>" value="" min="0" readonly />
-                                    </td>
-
-                                    <td class="qty">
-                                        <input type="number" name="avqty[]" onkeyup="product_search(<?php echo $i; ?>, 'avqty');" class="total_qntt_1 form-control text-right" id="avqty<?php echo $i; ?>" placeholder="0.00" min="0" readonly />
-                                    </td>
-
-                                    <td class="qty">
-                                        <input type="text" name="product_quantity[]" id="qty<?php echo $i; ?>" min="0" class="form-control text-right store_cal_1" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" placeholder="0.00" value="" tabindex="6" />
-                                    </td>
-
-                                    <td class="rate">
-                                        <input type="text" name="product_rate[]" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" id="product_rate<?php echo $i; ?>" class="form-control product_rate_1 text-right" placeholder="0.00" value="" min="0" tabindex="7" />
-                                    </td>
-
-                                    <td class="qty">
-                                        <input type="text" name="discount_per[]" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" id="discount<?php echo $i; ?>" class="form-control discount_1 text-right" min="0" tabindex="11" placeholder="0.00" />
-                                        <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type">
-                                    </td>
-
-                                    <td class="rate">
-                                        <input type="text" name="discountvalue[]" id="discount_value<?php echo $i; ?>" class="form-control text-right discount_value_1 total_discount_val" min="0" tabindex="12" placeholder="0.00" readonly />
-                                    </td>
-
-                                    <!-- VAT start -->
-                                    <?php if ($vtinfo->ischecked == 1) { ?>
-                                        <td class="qty">
-                                            <input type="text" name="vatpercent[]" onkeyup="calculate_sum(<?php echo $i; ?>);" onchange="calculate_sum(<?php echo $i; ?>);" id="vat_percent<?php echo $i; ?>" class="form-control vat_percent_1 text-right" min="0" tabindex="13" placeholder="0.00" />
-                                        </td>
-                                        <td class="rate">
-                                            <input type="text" name="vatvalue[]" id="vat_value<?php echo $i; ?>" class="form-control vat_value1 text-right total_vatamnt" min="0" tabindex="14" placeholder="0.00" readonly />
-                                        </td>
-                                    <?php } else { ?>
-                                        <input type="hidden" class="form-control" name="vat" id="vat_percent<?php echo $i; ?>" value="0.0">
-                                        <input type="hidden" class="form-control" name="vat" id="vat_value<?php echo $i; ?>" value="0.0">
-
-                                    <?php } ?>
-                                    <!-- VAT end -->
-
-                                    <td class="product_field">
-                                        <input class="form-control total_price text-right total_price_1" type="text" name="total_price[]" id="total_price<?php echo $i; ?>" value="0.00" readonly="readonly" />
-                                        <input type="hidden" id="total_discount<?php echo $i; ?>" class="" />
-                                        <input type="hidden" id="all_discount<?php echo $i; ?>" class="total_discount dppr" name="discount_amount[]" />
-                                    </td>
-
-                                    <td>
-                                        <button class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(<?php echo $i; ?>)'>
-                                            <i class='fa fa-trash'></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            <?php
-                            }
-                            ?>
-
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <td class="text-right" colspan="10"><b><?php echo display('total') ?>:</b></td>
-
-                                <?php } else { ?>
-                                    <td class="text-right" colspan="8"><b><?php echo display('total') ?>:</b></td>
-
-                                <?php } ?>
-                                <td class="text-right">
-                                    <input type="text" id="Total" class="text-right form-control" name="total" value="0.00" readonly="readonly" />
-                                </td>
-                                <td> <button type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item"
-                                        onClick="addInputField('addinvoiceItem');" tabindex="9"><i class="fa fa-plus"></i></button>
-
-                                    <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
+                                    <button class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(<?php echo $i; ?>)'>
+                                        <i class='fa fa-trash'></i>
+                                    </button>
                                 </td>
                             </tr>
-                            <tr>
+                        <?php
+                        }
+                        ?>
 
-
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <td class="text-right" colspan="10"><b>Sale Discount:</b>
-                                    </td>
-                                <?php } else { ?>
-                                    <td class="text-right" colspan="8"><b>Sale Discount:</b>
-                                    </td>
-                                <?php } ?>
-                                <td class="text-right">
-                                    <input type="text" id="discount" class="text-right form-control discount total_discount_val" onkeyup="calculate_sum(1)" name="discount" placeholder="0.00" value="" />
-                                </td>
-
-                                <td>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <td class="text-right" colspan="10"><b><?php echo display('total_discount') ?>:</b></td>
-
-                                <?php } else { ?>
-                                    <td class="text-right" colspan="8"><b><?php echo display('total_discount') ?>:</b></td>
-
-                                <?php } ?>
-                                <td class="text-right">
-                                    <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
-                                </td>
-                            </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
                             <?php if ($vtinfo->ischecked == 1) { ?>
-                                <tr>
+                                <td class="text-right" colspan="10"><b><?php echo display('total') ?>:</b></td>
 
-                                    <td class="text-right" colspan="10"><b><?php echo display('ttl_val') ?>:</b></td>
+                            <?php } else { ?>
+                                <td class="text-right" colspan="8"><b><?php echo display('total') ?>:</b></td>
 
-                                    <td class="text-right">
-                                        <input type="text" id="total_vat_amnt" class="form-control text-right" name="total_vat_amnt" value="0.00" readonly="readonly" />
-                                    </td>
-                                </tr>
-                            <?php } else {  ?>
-                                <input type="hidden" class="form-control" name="vat" id="total_vat_amnt" value="0.0">
                             <?php } ?>
+                            <td class="text-right">
+                                <input type="text" id="Total" class="text-right form-control" name="total" value="0.00" readonly="readonly" />
+                            </td>
+                            <td> <button type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item"
+                                    onClick="addInputField('addinvoiceItem');" tabindex="9"><i class="fa fa-plus"></i></button>
+
+                                <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
+                            </td>
+                        </tr>
+                        <tr>
 
 
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <td class="text-right" colspan="10"><b>Sale Discount:</b>
+                                </td>
+                            <?php } else { ?>
+                                <td class="text-right" colspan="8"><b>Sale Discount:</b>
+                                </td>
+                            <?php } ?>
+                            <td class="text-right">
+                                <input type="text" id="discount" class="text-right form-control discount total_discount_val" onkeyup="calculate_sum(1)" name="discount" placeholder="0.00" value="" />
+                            </td>
+
+                            <td>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <td class="text-right" colspan="10"><b><?php echo display('total_discount') ?>:</b></td>
+
+                            <?php } else { ?>
+                                <td class="text-right" colspan="8"><b><?php echo display('total_discount') ?>:</b></td>
+
+                            <?php } ?>
+                            <td class="text-right">
+                                <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
+                            </td>
+                             <td>
+
+                            </td>
+                        </tr>
+                        <?php if ($vtinfo->ischecked == 1) { ?>
                             <tr>
 
-                                <?php if ($vtinfo->ischecked == 1) { ?>
-                                    <td class="text-right" colspan="10"><b><?php echo display('grand_total') ?>:</b></td>
+                                <td class="text-right" colspan="10"><b><?php echo display('ttl_val') ?>:</b></td>
 
-                                <?php } else { ?>
-                                    <td class="text-right" colspan="8"><b><?php echo display('grand_total') ?>:</b></td>
-
-                                <?php } ?>
                                 <td class="text-right">
-                                    <input type="text" id="grandTotal" class="text-right form-control grandTotalamnt" name="grand_total_price" placeholder="0.00" value="00" readonly />
+                                    <input type="text" id="total_vat_amnt" class="form-control text-right" name="total_vat_amnt" value="0.00" readonly="readonly" />
                                 </td>
-                                <td> </td>
+                                 <td>
+
+                            </td>
                             </tr>
+                        <?php } else {  ?>
+                            <input type="hidden" class="form-control" name="vat" id="total_vat_amnt" value="0.0">
+                        <?php } ?>
 
-                        </tfoot>
-                    </table>
-                    <input type="hidden" name="finyear" value="<?php echo financial_year(); ?>">
-                    <p hidden id="pay-amount"></p>
-                    <p hidden id="change-amount"></p>
-                    
-                </div>
 
-                <div class="form-group row text-right">
-                    <div class="col-sm-12 p-20">
-                        <button id="save_add" class="btn btn-success" name="add-invoice" onclick="save()">
-                            <?php echo (empty($id) ? display('save') : display('update')) ?></button>
-                    </div>
+                        <tr>
+
+                            <?php if ($vtinfo->ischecked == 1) { ?>
+                                <td class="text-right" colspan="10"><b><?php echo display('grand_total') ?>:</b></td>
+
+                            <?php } else { ?>
+                                <td class="text-right" colspan="8"><b><?php echo display('grand_total') ?>:</b></td>
+
+                            <?php } ?>
+                            <td class="text-right">
+                                <input type="text" id="grandTotal" class="text-right form-control grandTotalamnt" name="grand_total_price" placeholder="0.00" value="00" readonly />
+                            </td>
+                            <td> </td>
+                        </tr>
+
+                    </tfoot>
+                </table>
+                <input type="hidden" name="finyear" value="<?php echo financial_year(); ?>">
+                <p hidden id="pay-amount"></p>
+                <p hidden id="change-amount"></p>
+
+            </div>
+
+            <div class="form-group row text-right">
+                <div class="col-sm-12 p-20">
+                    <button id="save_add" class="btn btn-success" name="add-invoice" onclick="save()">
+                        <?php echo (empty($id) ? display('save') : display('update')) ?></button>
                 </div>
             </div>
         </div>
-
     </div>
+
+</div>
 </div>
 
 <?php
@@ -496,12 +577,12 @@ echo "</script>";
                     });
                     $employeeDropdown.val(sales[0].employee_id)
 
-                   
+
 
                     var $incidenttypeDropdown = $('#incidenttype');
                     $incidenttypeDropdown.empty();
                     $incidenttypeDropdown.append('<option value="" disabled selected>Select Incident Type</option>'); // Add default option
-                    $incidenttypeDropdown.append('<option value="1">Sales</option>');
+                    $incidenttypeDropdown.append('<option value="1">Retail</option>');
                     $incidenttypeDropdown.append('<option value="2">Wholesale</option>');
                     $incidenttypeDropdown.val(sales[0].incidenttype)
 
@@ -542,7 +623,7 @@ echo "</script>";
                     console.log(error);
                 }
             });
-        }else{
+        } else {
             getBranchDropdown(0);
 
         }
@@ -897,11 +978,10 @@ echo "</script>";
                 if (document.getElementById('customer_id').value == "" || document.getElementById('customer_id').value === " ") {
                     alert("Customer shouldn't be empty")
                     return
-                }  else if (document.getElementById('branch').value == "") {
+                } else if (document.getElementById('branch').value == "") {
                     alert("Branch shouldn't be empty")
                     return
-                }
-                else if (document.getElementById('product' + i).value == "") {
+                } else if (document.getElementById('product' + i).value == "") {
                     alert("Product shouldn't be empty")
                     return
                 } else if (document.getElementById('store' + i).value == "") {
@@ -925,14 +1005,14 @@ echo "</script>";
                         product_name: dropdown.options[dropdown.selectedIndex].text,
                         store: document.getElementById('store' + i).value,
                         quantity: document.getElementById('qty' + i).value,
-                        product_rate:document.getElementById('product_rate' + i).value? document.getElementById('product_rate' + i).value:"0",
-                        discount: document.getElementById('discount' + i).value?document.getElementById('discount' + i).value:"0",
-                        discount_value:document.getElementById('discount_value' + i).value? document.getElementById('discount_value' + i).value:"0",
-                        vat_percent: document.getElementById('vat_percent' + i).value?document.getElementById('vat_percent' + i).value:"0",
-                        vat_value: document.getElementById('vat_value' + i).value?document.getElementById('vat_value' + i).value:"0",
-                        total_price: document.getElementById('total_price' + i).value?document.getElementById('total_price' + i).value:"0",
-                        total_discount:document.getElementById('total_discount' + i).value? document.getElementById('total_discount' + i).value:"0",
-                        all_discount: document.getElementById('all_discount' + i).value?document.getElementById('all_discount' + i).value:"0",
+                        product_rate: document.getElementById('product_rate' + i).value ? document.getElementById('product_rate' + i).value : "0",
+                        discount: document.getElementById('discount' + i).value ? document.getElementById('discount' + i).value : "0",
+                        discount_value: document.getElementById('discount_value' + i).value ? document.getElementById('discount_value' + i).value : "0",
+                        vat_percent: document.getElementById('vat_percent' + i).value ? document.getElementById('vat_percent' + i).value : "0",
+                        vat_value: document.getElementById('vat_value' + i).value ? document.getElementById('vat_value' + i).value : "0",
+                        total_price: document.getElementById('total_price' + i).value ? document.getElementById('total_price' + i).value : "0",
+                        total_discount: document.getElementById('total_discount' + i).value ? document.getElementById('total_discount' + i).value : "0",
+                        all_discount: document.getElementById('all_discount' + i).value ? document.getElementById('all_discount' + i).value : "0",
                     });
                 }
             }
@@ -949,7 +1029,7 @@ echo "</script>";
                     id: id,
                     items: arrItem,
                     discount: document.getElementById('discount').value,
-                    type2: type2,
+                    type2: "C",
                     total_discount_ammount: document.getElementById('total_discount_ammount').value,
                     total_vat_amnt: document.getElementById('total_vat_amnt').value,
                     grandTotal: document.getElementById('grandTotal').value,
@@ -970,7 +1050,7 @@ echo "</script>";
                     clearDetails()
                     $("#save_add").show();
 
-                    alert("Quotation  Details Updated Successfully")
+                    alert("Sales Order  Details Updated Successfully")
                     printRawHtml(datas.details);
 
 
@@ -989,7 +1069,7 @@ echo "</script>";
                 type: 'POST',
                 data: {
                     items: arrItem,
-                    type2: type2,
+                    type2: "C",
                     discount: document.getElementById('discount').value,
                     total_discount_ammount: document.getElementById('total_discount_ammount').value,
                     total_vat_amnt: document.getElementById('total_vat_amnt').value,
@@ -1007,7 +1087,7 @@ echo "</script>";
                     clearDetails()
                     $("#save_add").show();
 
-                    alert("Quotation  Details saved Successfully")
+                    alert("Sales Order  Details saved Successfully")
                     printRawHtml(datas.details);
                 },
                 error: function(error) {
@@ -1076,7 +1156,7 @@ echo "</script>";
             $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
         });
 
-      
+
     }
 
     function printRawHtml(view) {

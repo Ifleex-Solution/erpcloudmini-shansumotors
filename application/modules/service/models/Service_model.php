@@ -587,20 +587,40 @@ class Service_model extends CI_Model {
 
 
     public function service_invoice_list($limit = null, $start = null){
-             return $this->db->select('a.*,b.customer_name')   
-            ->from('service_invoice a')
-            ->join('customer_information b','b.customer_id=a.customer_id','left')
-            ->order_by('a.id', 'desc')
-            ->limit($limit, $start)
-            ->get()
-            ->result_array();
+        $encryption_key = Config::$encryption_key;
+
+        return $this->db
+        ->select("a.*, AES_DECRYPT(b.customer_name, '$encryption_key') AS customer_name", false)
+        ->from('service_invoice a')
+        ->join('customer_information b', 'b.customer_id = a.customer_id', 'left')
+        ->order_by('a.id', 'desc')
+        ->limit($limit, $start)
+        ->get()
+        ->result_array();
     }
 
     // customer information 
     public function customer_info($customer_id){
-        return $this->db->select('*')
-                    ->from('customer_information')
-                    ->where('customer_id',$customer_id)
+        $encryption_key = Config::$encryption_key;
+
+        return $this->db->select("a.customer_id as customer_id,
+       AES_DECRYPT(a.customer_name, '{$encryption_key}') AS customer_name,
+      AES_DECRYPT(a.customer_mobile, '{$encryption_key}') AS customer_mobile,
+       AES_DECRYPT(a.customer_address, '{$encryption_key}') AS customer_address,
+       AES_DECRYPT(a.address2, '{$encryption_key}') AS address2,
+       AES_DECRYPT(a.customer_mobile, '{$encryption_key}') AS customer_mobile,
+       AES_DECRYPT(a.customer_email, '{$encryption_key}') AS customer_email,
+
+       AES_DECRYPT(a.email_address, '{$encryption_key}') AS email_address,
+       AES_DECRYPT(a.contact, '{$encryption_key}') AS contact,
+       AES_DECRYPT(a.phone, '{$encryption_key}') AS phone,
+       a.fax as fax,
+       a.city as city,
+       a.state as state,
+       a.zip as zip,
+       a.country as country,IF(a.status = 1, 'Active', 'Inactive') as status_label")
+                    ->from('customer_information a')
+                    ->where('a.customer_id',$customer_id)
                     ->get()
                     ->row();
     }
@@ -895,6 +915,401 @@ class Service_model extends CI_Model {
         $query=$this->db->query("SELECT MAX(HeadCode) as HeadCode FROM acc_coa WHERE HeadLevel='3' And HeadCode LIKE '12200%' ORDER BY CreateDate DESC");
         return $query->row();
 
+    }
+
+       public function service($postData = null, $type2,$branchid)
+    {
+
+        $response = array();
+
+        $encryption_key = Config::$encryption_key;
+
+        $branchResult = $this->db->select("branch.id")
+            ->from('sec_branch')
+            ->join('branch', 'branch.id=sec_branch.branchid')
+            ->where('sec_branch.userid', $this->session->userdata('id'))
+            ->group_by('sec_branch.branchid')
+            ->get()
+            ->result();
+
+        $branchids = [];
+
+        if ( isset($branchResult)) {
+            $branchids = array_column($branchResult, 'id');
+        }
+
+        ## Read value
+        $draw = $postData['draw'];
+        $start = $postData['start'];
+        $rowperpage = $postData['length']; // Rows display per page
+        $columnIndex = $postData['order'][0]['column']; // Column index
+        $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+        $searchValue = $postData['search']['value']; // Search value
+
+        ## Search 
+        $searchQuery = "";
+        if ($searchValue != '') {
+            $searchQuery = " (po.id like '%" . $searchValue . "%' or po.date like '%" . $searchValue . "%'  
+            or   AES_DECRYPT( si.customer_name,'" . $encryption_key . "')  like '%" . $searchValue . "%' or po.details like '%" . $searchValue . "%' ) ";
+        }
+
+        ## Total number of records without filtering
+        $this->db->select('count(*) as allcount');
+        $this->db->from('service po');
+        $this->db->join('customer_information si', 'si.customer_id = po.customer_id', "left");
+        $this->db->join('payment_type pt', 'pt.id = po.payment_type', "left");
+
+        $this->db->where("AES_DECRYPT(po.type2,'" . $encryption_key . "')", $type2);
+       
+        if($branchid>0){
+            $this->db->where("po.branch", $branchid);
+
+        }else{
+            if ($this->session->userdata('user_level2') != 1) {
+                $this->db->where_in('po.branch', $branchids);
+            }
+        }
+        if ($searchValue != '')
+            $this->db->where($searchQuery);
+        $records = $this->db->get()->result();
+        $totalRecords = $records[0]->allcount;
+
+        //     ## Total number of record with filtering
+        $this->db->select('count(*) as allcount');
+        $this->db->from('service po');
+        $this->db->join('customer_information si', 'si.customer_id = po.customer_id', "left");
+        $this->db->join('payment_type pt', 'pt.id = po.payment_type', "left");
+
+        $this->db->where("AES_DECRYPT(po.type2,'" . $encryption_key . "')", $type2);
+
+        if($branchid>0){
+            $this->db->where("po.branch", $branchid);
+
+        }else{
+            if ($this->session->userdata('user_level2') != 1) {
+                $this->db->where_in('po.branch', $branchids);
+            }
+        }
+
+
+        if ($searchValue != '')
+            $this->db->where($searchQuery);
+
+
+        $records = $this->db->get()->result();
+        $totalRecordwithFilter = $records[0]->allcount;
+
+
+
+        ## Fetch records
+        $this->db->select('po.id,AES_DECRYPT(po.service_id,"' . $encryption_key . '") AS service_id, 
+         si.customer_id, 
+           AES_DECRYPT(si.customer_name,"' . $encryption_key . '") AS customer_name ,
+         po.date, 
+         po.details, 
+          po.status, 
+         AES_DECRYPT(po.discount,"' . $encryption_key . '") AS discount, 
+         AES_DECRYPT(po.total_discount_ammount, "' . $encryption_key . '") AS total_discount_ammount, 
+         AES_DECRYPT(po.total_vat_amnt, "' . $encryption_key . '") AS total_vat_amnt, 
+         AES_DECRYPT(po.grandTotal, "' . $encryption_key . '") AS grandTotal, 
+         AES_DECRYPT(po.total,"' . $encryption_key . '") AS total,pt.name AS paymenttype,
+        po.details');
+        $this->db->from('service po');
+        $this->db->join('customer_information si', 'si.customer_id = po.customer_id', "left");
+        $this->db->join('payment_type pt', 'pt.id = po.payment_type', 'left');
+        $this->db->where("AES_DECRYPT(po.type2,'" . $encryption_key . "')", $type2);
+
+        if($branchid>0){
+            $this->db->where("po.branch", $branchid);
+
+        }else{
+            if ($this->session->userdata('user_level2') != 1) {
+                $this->db->where_in('po.branch', $branchids);
+            }
+        }
+
+        if ($searchValue != '')
+            $this->db->where($searchQuery);
+        $this->db->order_by($columnName, $columnSortOrder);
+        $this->db->limit($rowperpage, $start);
+        $this->db->order_by("service_id", "desc");
+        $this->db->order_by("po.date", "desc");
+
+        $records = $this->db->get()->result();
+        $data = array();
+        $sl = 1;
+
+        foreach ($records as $record) {
+
+
+            $button = '';
+            $base_url = base_url();
+            $jsaction = "return confirm('Are You Sure ?')";
+            if ($record->status == 0) {
+                if ($this->permission1->method('manage_service_invoice', 'update')->access()) {
+                    $button .= ' <a  style="margin-left:7px;" href="' . $base_url . 'edit_service_invoice/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                }
+                if ($this->permission1->method('manage_service_invoice', 'delete')->access()) {
+
+                    $button .= '  <a  style="margin-left:7px;" href="' . $base_url . 'service/service/delete_service/' . $record->id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-trash"></i></a>';
+                }
+            }
+
+
+            // $button .= '  <a href="' . $base_url . 'invoice_details/' . $record->id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
+
+
+            $button .= '  </button>  <button  style="margin-left:7px;" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="left" title="Reprint" 
+                onclick="reprintInvoice(' . $record->id . ')">
+                <i class="fa fa-fax" ></i>
+            </button>';
+
+            $button .= '  <a style="margin-left:7px;" href="' . $base_url . 'service_details/' . $record->id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
+
+
+            $link = '  <a style="margin-left:7px;" href="' . $base_url . 'service_details/' . $record->id . '"   >' . $record->service_id . '</a>';
+
+
+
+            $data[] = array(
+                'sl'       => $sl,
+                'id'       => $link,
+                'customer_name'  => $record->customer_name,
+                'date'         => $record->date,
+                'grandTotal' =>   $record->grandTotal,
+                'paymenttype'         => $record->paymenttype,
+                'details'    => $record->details,
+                'button'   => '<div >' . $button . '</div>',
+            );
+
+            $sl++;
+        }
+
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $data
+        );
+
+        return $response;
+    }
+
+
+    public function serviceorder($postData = null, $type2,$branchid)
+    {
+
+        $response = array();
+
+        $encryption_key = Config::$encryption_key;
+
+        $branchResult = $this->db->select("branch.id")
+            ->from('sec_branch')
+            ->join('branch', 'branch.id=sec_branch.branchid')
+            ->where('sec_branch.userid', $this->session->userdata('id'))
+            ->group_by('sec_branch.branchid')
+            ->get()
+            ->result();
+
+        $branchids = [];
+
+        if ( isset($branchResult)) {
+            $branchids = array_column($branchResult, 'id');
+        }
+
+        ## Read value
+        $draw = $postData['draw'];
+        $start = $postData['start'];
+        $rowperpage = $postData['length']; // Rows display per page
+        $columnIndex = $postData['order'][0]['column']; // Column index
+        $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+        $searchValue = $postData['search']['value']; // Search value
+
+        ## Search 
+        $searchQuery = "";
+        if ($searchValue != '') {
+            $searchQuery = " (po.id like '%" . $searchValue . "%' or po.date like '%" . $searchValue . "%'  
+            or   AES_DECRYPT( si.customer_name,'" . $encryption_key . "')  like '%" . $searchValue . "%' or po.details like '%" . $searchValue . "%' ) ";
+        }
+
+        ## Total number of records without filtering
+        $this->db->select('count(*) as allcount');
+        $this->db->from('service_order po');
+        $this->db->join('customer_information si', 'si.customer_id = po.customer_id', "left");
+
+        $this->db->where("AES_DECRYPT(po.type2, '$encryption_key') IN ('C', '$type2')",
+        null,
+        false
+    );         
+        if($branchid>0){
+            $this->db->where("po.branch", $branchid);
+
+        }else{
+            if ($this->session->userdata('user_level2') != 1) {
+                $this->db->where_in('po.branch', $branchids);
+            }
+        }
+        if ($searchValue != '')
+            $this->db->where($searchQuery);
+        $records = $this->db->get()->result();
+        $totalRecords = $records[0]->allcount;
+
+        //     ## Total number of record with filtering
+        $this->db->select('count(*) as allcount');
+        $this->db->from('service_order po');
+        $this->db->join('customer_information si', 'si.customer_id = po.customer_id', "left");
+
+        $this->db->where("AES_DECRYPT(po.type2, '$encryption_key') IN ('C', '$type2')",
+        null,
+        false
+    );  
+        if($branchid>0){
+            $this->db->where("po.branch", $branchid);
+
+        }else{
+            if ($this->session->userdata('user_level2') != 1) {
+                $this->db->where_in('po.branch', $branchids);
+            }
+        }
+
+
+        if ($searchValue != '')
+            $this->db->where($searchQuery);
+
+
+        $records = $this->db->get()->result();
+        $totalRecordwithFilter = $records[0]->allcount;
+
+
+
+        ## Fetch records
+        $this->db->select('po.id,AES_DECRYPT(po.service_order_id,"' . $encryption_key . '") AS service_order_id, 
+         si.customer_id, 
+           AES_DECRYPT(si.customer_name,"' . $encryption_key . '") AS customer_name ,
+         po.date, 
+         po.details, 
+          po.status, 
+         AES_DECRYPT(po.discount,"' . $encryption_key . '") AS discount, 
+         AES_DECRYPT(po.total_discount_ammount, "' . $encryption_key . '") AS total_discount_ammount, 
+         AES_DECRYPT(po.total_vat_amnt, "' . $encryption_key . '") AS total_vat_amnt, 
+         AES_DECRYPT(po.grandTotal, "' . $encryption_key . '") AS grandTotal, 
+         AES_DECRYPT(po.total,"' . $encryption_key . '") AS total,
+        po.details,
+          CASE 
+        WHEN po.status = 0 THEN \'Ordered\'
+        WHEN po.status = 1 THEN \'Sold\'
+        ELSE \'Canceled\'
+    END AS status_label');
+        $this->db->from('service_order po');
+        $this->db->join('customer_information si', 'si.customer_id = po.customer_id', "left");
+
+        $this->db->where("AES_DECRYPT(po.type2, '$encryption_key') IN ('C', '$type2')",
+        null,
+        false
+    );  
+
+
+        if($branchid>0){
+            $this->db->where("po.branch", $branchid);
+
+        }else{
+            if ($this->session->userdata('user_level2') != 1) {
+                $this->db->where_in('po.branch', $branchids);
+            }
+        }
+
+        if ($searchValue != '')
+            $this->db->where($searchQuery);
+        $this->db->order_by($columnName, $columnSortOrder);
+        $this->db->limit($rowperpage, $start);
+        $this->db->order_by("service_order_id", "desc");
+        $this->db->order_by("po.date", "desc");
+
+        $records = $this->db->get()->result();
+        $data = array();
+        $sl = 1;
+
+        foreach ($records as $record) {
+
+
+            $button = '';
+            $base_url = base_url();
+            $jsaction = "return confirm('Are You Sure ?')";
+            if ($record->status != 1) {
+
+                if ($record->status == 2) {
+                    $button .= '  <a  style="margin-left:5px;" href="' . $base_url . 'service/service/update_serviceorderstatusredo/' . $record->id . '" class="btn btn-xs btn-warning "  onclick="' . $jsaction . '"><i class="fa fa-repeat"></i></a>';
+                }
+
+                if ($record->status == 0) {
+                    $button .= '  <a  style="margin-left:5px;" href="' . $base_url . 'service/service/update_serviceeorderstatuscancel/' . $record->id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-times"></i></a>';
+                }
+
+                if ($this->permission1->method('manage_serviceorder_invoice', 'update')->access()) {
+                    $button .= ' <a  style="margin-left:7px;" href="' . $base_url . 'edit_serviceorder_invoice/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                }
+                if ($this->permission1->method('manage_serviceorder_invoice', 'delete')->access()) {
+
+                    $button .= '  <a  style="margin-left:7px;" href="' . $base_url . 'service/service/delete_serviceorder/' . $record->id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-trash"></i></a>';
+                }
+            }
+
+            if ($record->status == 0) {
+
+
+                $button .= '  <a style="margin-left:5px;"  href="' . $base_url . 'convert_service/' . $record->id . '" class="btn btn-xs btn-success "  onclick="' . $jsaction . '"><i class="fa fa-exchange"></i></a>';
+            }
+
+            // $button .= '  <a href="' . $base_url . 'invoice_details/' . $record->id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
+
+
+            $button .= '  </button>  <button  style="margin-left:7px;" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="left" title="Reprint" 
+                onclick="reprintInvoice(' . $record->id . ')">
+                <i class="fa fa-fax" ></i>
+            </button>';
+
+            $link = $record->service_order_id;
+
+            if($record->status==2){
+                $status='<span class="label label-danger"  >'.$record->status_label.'</a>';
+            }
+
+            if($record->status==1){
+                $status='<span class="label label-success"  >'.$record->status_label.'</a>';
+            }
+
+            if($record->status==0){
+                $status='<span class="label label-warning"  >'.$record->status_label.'</a>';
+            }
+
+
+
+            $data[] = array(
+                'sl'       => $sl,
+                'id'       => $link,
+                'customer_name'  => $record->customer_name,
+                'date'         => $record->date,
+                'grandTotal' =>   $record->grandTotal,
+                'details'    => $record->details,
+                'status' => $status,
+                'button'   => '<div >' . $button . '</div>',
+            );
+
+            $sl++;
+        }
+
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $data
+        );
+
+        return $response;
     }
 }
 

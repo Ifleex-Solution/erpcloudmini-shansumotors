@@ -53,7 +53,7 @@
                 </a>
                 <ul class="treeview-menu">
 
-                   
+
 
                     <?php if ($this->permission1->method('add_store', 'create')->access()) { ?>
                         <li class="<?php echo (($this->uri->segment(1) == "store_form") ? "active" : '') ?>">
@@ -84,8 +84,8 @@
 
         <?php if (
             $this->permission1->method('add_branch', 'create')->access()
-            ||$this->permission1->method('branch_list', 'read')->access()
-           
+            || $this->permission1->method('branch_list', 'read')->access()
+
         ) { ?>
 
             <li class="treeview <?php
@@ -98,7 +98,7 @@
                                 }
                                 ?>">
                 <a href="#">
-                    <i class="ti-home" ></i><span style="margin-left: 10px;"><?php echo display('branch') ?></span>
+                    <i class="ti-home"></i><span style="margin-left: 10px;"><?php echo display('branch') ?></span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
@@ -124,7 +124,7 @@
                                             ?>"><a href="<?php echo base_url('branch_list') ?>"><?php echo display('branch_list') ?></a></li>
                     <?php } ?>
 
-                   
+
 
                 </ul>
             </li>
@@ -482,7 +482,7 @@
             || $this->permission1->method('manage_purchase', 'read')->access()
             || $this->permission1->method('new_purchase_order', 'create')->access()
             || $this->permission1->method('manage_purchase_order', 'read')->access()
-           
+
         ) { ?>
             <li class="treeview <?php
                                 if (
@@ -492,7 +492,7 @@
                                     || $this->uri->segment('1') == ("purchase_details")
                                     || $this->uri->segment('1') == ("new_purchase_order")
                                     || $this->uri->segment('1') == ("manage_purchase_order")
-                                    
+
                                 ) {
                                     echo "active";
                                 } else {
@@ -539,15 +539,19 @@
 
 
         <!-- Invoice menu start -->
-        <?php if ($this->permission1->method('new_invoice', 'create')->access() || $this->permission1->method('manage_invoice', 'read')->access()
-         || $this->permission1->method('new_quotation', 'create')->access()
-         || $this->permission1->method('manage_quotation', 'read')->access()) { ?>
+        <?php if (
+            $this->permission1->method('new_invoice', 'create')->access() || $this->permission1->method('manage_invoice', 'read')->access()
+            || $this->permission1->method('new_quotation', 'create')->access()
+            || $this->permission1->method('manage_quotation', 'read')->access()
+        ) { ?>
             <li class="treeview <?php
-                                if ($this->uri->segment('1') == ("add_invoice") || $this->uri->segment('1') == ("invoice_list") 
-                                 || $this->uri->segment('1') == ("invoice_details") || $this->uri->segment('1') == ("invoice_pad_print") 
-                                || $this->uri->segment('1') == ("pos_print") || $this->uri->segment('1') == ("invoice_edit")
-                                || $this->uri->segment('1') == ("new_quotation")
-                                    || $this->uri->segment('1') == ("manage_quotation")) {
+                                if (
+                                    $this->uri->segment('1') == ("add_invoice") || $this->uri->segment('1') == ("invoice_list")
+                                    || $this->uri->segment('1') == ("invoice_details") || $this->uri->segment('1') == ("invoice_pad_print")
+                                    || $this->uri->segment('1') == ("pos_print") || $this->uri->segment('1') == ("invoice_edit")
+                                    || $this->uri->segment('1') == ("new_quotation")
+                                    || $this->uri->segment('1') == ("manage_quotation")
+                                ) {
                                     echo "active";
                                 } else {
                                     echo " ";
@@ -560,7 +564,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                <?php if ($this->permission1->method('new_quotation', 'create')->access()) { ?>
+                    <?php if ($this->permission1->method('new_quotation', 'create')->access()) { ?>
                         <li class="treeview <?php
                                             if ($this->uri->segment('1') == ("new_quotation")) {
                                                 echo "active";
@@ -597,7 +601,7 @@
                                             ?>"><a href="<?php echo base_url('invoice_list') ?>"><?php echo display('manage_invoice') ?></a></li>
                     <?php } ?>
 
-                    
+
 
                 </ul>
             </li>
@@ -607,10 +611,19 @@
 
 
         <!-- service menu start -->
-        <?php if ($this->permission1->method('service_invoice', 'create')->access() || $this->permission1->method('manage_service_invoice', 'read')->access()) { ?>
+        <?php if (
+            $this->permission1->method('service_invoice', 'create')->access()
+            || $this->permission1->method('manage_service_invoice', 'read')->access()
+            || $this->permission1->method('serviceorder_invoice', 'create')->access()
+            || $this->permission1->method('manage_serviceorder_invoice', 'read')->access()
+        ) { ?>
 
             <li class="treeview <?php
-                                if ($this->uri->segment('1') == ("add_service_invoice") || $this->uri->segment('1') == ("service_details") || $this->uri->segment('1') == ("manage_service_invoice") || $this->uri->segment('1') == ("edit_service_invoice")) {
+                                if (
+                                    $this->uri->segment('1') == ("add_service_invoice") || $this->uri->segment('1') == ("service_details") || $this->uri->segment('1') == ("manage_service_invoice")
+                                    || $this->uri->segment('1') == ("edit_service_invoice")
+                                    || $this->uri->segment('1') == ("serviceorder_invoice") || $this->uri->segment('1') == ("manage_serviceorder_invoice")
+                                ) {
                                     echo "active";
                                 } else {
                                     echo " ";
@@ -623,6 +636,26 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
+                    <?php if ($this->permission1->method('serviceorder_invoice', 'create')->access()) { ?>
+                        <li class="treeview <?php
+                                            if ($this->uri->segment('1') == ("serviceorder_invoice")) {
+                                                echo "active";
+                                            } else {
+                                                echo " ";
+                                            }
+                                            ?>"><a href="<?php echo base_url('serviceorder_invoice') ?>"><?php echo display('serviceorder_invoice') ?></a>
+                        </li>
+                    <?php } ?>
+                    <?php if ($this->permission1->method('manage_serviceorder_invoice', 'read')->access()) { ?>
+                        <li class="treeview <?php
+                                            if ($this->uri->segment('1') == ("manage_serviceorder_invoice")) {
+                                                echo "active";
+                                            } else {
+                                                echo " ";
+                                            }
+                                            ?>"><a href="<?php echo base_url('manage_serviceorder_invoice') ?>"><?php echo display('manage_serviceorder_invoice') ?></a>
+                        </li>
+                    <?php } ?>
                     <?php if ($this->permission1->method('service_invoice', 'create')->access()) { ?>
                         <li class="treeview <?php
                                             if ($this->uri->segment('1') == ("add_service_invoice")) {
@@ -758,6 +791,8 @@
             || $this->permission1->method('balance_sheet', 'read')->access() || $this->permission1->method('product_wise_sales_report', 'read')->access()
             || $this->permission1->method('fixedasset_schedule', 'read')->access()
             || $this->permission1->method('bank_reconciliation_report', 'read')->access()
+            || $this->permission1->method('service_report', 'read')->access()
+
             || $this->permission1->method('cheque_flow__report', 'create')->access() || $this->permission1->method('stock', 'read')->access() || $this->permission1->method('stock_report', 'read')->access()
             || $this->permission1->method('todays_customer_receipt', 'read')->access() || $this->permission1->method('todays_sales_report', 'read')->access() || $this->permission1->method('due_report', 'read')->access() || $this->permission1->method('todays_purchase_report', 'read')->access() || $this->permission1->method('purchase_report_category_wise', 'read')->access() || $this->permission1->method('product_sales_reports_date_wise', 'read')->access() || $this->permission1->method('sales_report_category_wise', 'read')->access()
             || $this->permission1->method('shipping_cost_report', 'read')->access()  || $this->permission1->method('live_stock_report', 'read')->access()
@@ -768,6 +803,7 @@
             <li class="treeview <?php
                                 if (
                                     $this->uri->segment('1') == ("cash_book") || $this->uri->segment('1') == ("cash_book_report")
+                                    || $this->uri->segment('1') == ("service_report")
                                     || $this->uri->segment('1') == ("day_book") || $this->uri->segment('1') == ("day_book_report")
                                     || $this->uri->segment('1') == ("bank_book") || $this->uri->segment('1') == ("bank_book_report") ||
                                     $this->uri->segment('1') == ("general_ledger") || $this->uri->segment('1') == ("sub_ledger") || $this->uri->segment('1') == ("sub_ledger_report") || $this->uri->segment('1') == ("trial_balance") || $this->uri->segment('1') == ("coa_print")
@@ -803,6 +839,14 @@
                                             } ?>"><a href="<?php echo base_url('cash_book') ?>"><?php echo display('cash_book'); ?></a></li>
                     <?php } ?>
 
+                    <?php if ($this->permission1->method('service_report', 'read')->access()) { ?>
+                        <li class="treeview <?php if ($this->uri->segment('1') == ("service_report")) {
+                                                echo "active";
+                                            } else {
+                                                echo " ";
+                                            } ?>"><a href="<?php echo base_url('service_report') ?>"><?php echo display('service_report') ?></a>
+                        </li>
+                    <?php } ?>
                     <?php if ($this->permission1->method('todays_sales_report', 'read')->access()) { ?>
                         <li class="treeview <?php if ($this->uri->segment('1') == ("sales_report")) {
                                                 echo "active";
@@ -811,6 +855,7 @@
                                             } ?>"><a href="<?php echo base_url('sales_report') ?>"><?php echo display('sales_report') ?></a>
                         </li>
                     <?php } ?>
+
                     <?php if ($this->permission1->method('user_wise_sales_report', 'read')->access()) { ?>
                         <li class="treeview <?php if ($this->uri->segment('1') == ("userwise_sales_report")) {
                                                 echo "active";
@@ -926,8 +971,8 @@
                                     || $this->uri->segment('1') == ("db_import") || $this->uri->segment('1') == ("editPhrase") || $this->uri->segment('1') == ("phrases") || $this->uri->segment('1') == ("invoice_wise_tax_report") || $this->uri->segment('1') == ("tax_setting")
                                     || $this->uri->segment('1') == ("income_tax") || $this->uri->segment('1') == ("manage_income_tax")
                                     || $this->uri->segment('1') == ("tax_reports") || $this->uri->segment('1') == ("update_tax_setting")
-                                    || $this->uri->segment('1') == ("vat_tax_setting")||$this->uri->segment('1') == ("user_assign_branch")
-                                    ||$this->uri->segment('1') == ("user_assign_store") 
+                                    || $this->uri->segment('1') == ("vat_tax_setting") || $this->uri->segment('1') == ("user_assign_branch")
+                                    || $this->uri->segment('1') == ("user_assign_store")
                                 ) {
                                     echo "active";
                                 } else {
@@ -1051,7 +1096,7 @@
                         <li class="treeview <?php
                                             if (
                                                 $this->uri->segment('1') == ("add_role") || $this->uri->segment('1') == ("role_list") || $this->uri->segment('1') == ("edit_role") || $this->uri->segment('1') == ("assign_role")
-                                                || $this->uri->segment('1') == ("add_user") || $this->uri->segment('1') == ("user_list")|| $this->uri->segment('1') == ("user_assign_branch")||$this->uri->segment('1') == ("user_assign_store")
+                                                || $this->uri->segment('1') == ("add_user") || $this->uri->segment('1') == ("user_list") || $this->uri->segment('1') == ("user_assign_branch") || $this->uri->segment('1') == ("user_assign_store")
                                             ) {
                                                 echo "active";
                                             } else {
