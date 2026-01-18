@@ -367,7 +367,7 @@ IF(a.status = 1, 'Active', 'Inactive') as status_label,s.name as sname");
             }
             $data[] = array(
                 'sl'               => $sl,
-                'product_name'     => $product_name,
+                'product_name'     =>  $record->product_name ,
                 'category_name'     => $record->category_name,
                 'product_id'       => $record->product_id,
                 'price'            =>$record->price!=""? number_format($record->price, 2, '.', ','):0,

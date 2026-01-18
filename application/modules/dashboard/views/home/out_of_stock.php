@@ -29,9 +29,7 @@
 									<tr>
 										<td><?php echo $sl; ?></td>
 										<td class="text-center">
-											<a href="<?php echo base_url() . 'product_details/' . $out_of_stock['product_id']; ?>">
-												<?php echo $out_of_stock['product_name']; ?>
-											</a>
+											<?php echo $out_of_stock['product_name']; ?>
 										</td>
 										<td class="text-center"><?php echo $out_of_stock['category_name']; ?></td>
 										<td class="text-center"><?php echo $out_of_stock['unit']; ?></td>

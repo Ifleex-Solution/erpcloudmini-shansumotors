@@ -42,9 +42,7 @@
                                                 <tr>
                                                     <td><?php echo $sl; ?></td>
                                                     <td>
-                                                        <a href="<?php echo base_url(); ?>product_details/<?php echo $single->product_id; ?>">
-                                                            <?php echo $single->product_name; ?>
-                                                        </a>
+                                                          <?php echo $single->product_name; ?>
                                                     </td>
                                                     <td><?php echo $single->quantity; ?></td>
                                                 </tr>
