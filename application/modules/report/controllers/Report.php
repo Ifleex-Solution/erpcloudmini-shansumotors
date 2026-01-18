@@ -926,7 +926,7 @@ class Report extends MX_Controller
         $pdf = new SalesReportInvoicewise('P', 'mm', 'A4', true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('Your Name');
-        $pdf->SetTitle('Service Report(Invoice Wise)');
+        $pdf->SetTitle('Service Report');
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, columns, example');
         $top_margin = 5;
@@ -935,7 +935,7 @@ class Report extends MX_Controller
         $pdf->AddPage();
         $pdf->SetFont('helvetica', '', 10);
 
-        $this->header($pdf, $page, "Service Report (Invoice Wise)", $_SESSION['seri_istype'], $_SESSION['serifrom_date'], $_SESSION['serito_date']);
+        $this->header($pdf, $page, "Service Report", $_SESSION['seri_istype'], $_SESSION['serifrom_date'], $_SESSION['serito_date']);
 
 
         $pdf->SetFont('helvetica', 'B', 12);
@@ -958,7 +958,7 @@ class Report extends MX_Controller
                 $patotal = 0;
                 $pdf->AddPage();
                 $page = $page + 1;
-                $this->header($pdf, $page, "Service Report (Invoice Wise)", $_SESSION['sri_istype'], $_SESSION['srifrom_date'], $_SESSION['srito_date']);
+                $this->header($pdf, $page, "Service Report", $_SESSION['sri_istype'], $_SESSION['srifrom_date'], $_SESSION['srito_date']);
                 $pdf->SetFont('helvetica', 'B', 12);
                 $pdf->Cell(45, 10, 'Sale Date', 'TB', 0, 'L', 0, '', 1);
                 $pdf->Cell(40, 10, 'Invoice No', 'TB', 0, 'L', 0, '', 1);
