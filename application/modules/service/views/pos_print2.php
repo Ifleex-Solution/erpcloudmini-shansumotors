@@ -15,7 +15,7 @@
                                                   <br/>
 
                             <span
-                                class="label label-success-outline m-r-15 p-10">Order From</span>
+                                class="label label-success-outline m-r-15 p-10">Service Center</span>
                             <address class="margin-top10">
                                 <strong class=""><?php echo $company_info[0]['company_name'] ?></strong><br>
                                 <span class="comp-web"><?php echo $company_info[0]['address'] ?></span><br>
@@ -44,7 +44,7 @@
                                 <br>
                             </div>
 
-                            <span class="label label-success-outline m-r-15">Order To</span>
+                            <span class="label label-success-outline m-r-15">Customer</span>
 
                             <address style="margin-top: 10px;" class="">
                                 <strong class=""><?php echo $customer_name ?> </strong><br>
