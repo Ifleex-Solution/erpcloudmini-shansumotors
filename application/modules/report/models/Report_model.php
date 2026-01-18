@@ -389,6 +389,47 @@ class Report_model extends CI_Model
         return false;
     }
 
+    public function service_reportinvoicewise($from_date, $to_date, $empid,$branch)
+    {
+        $encryption_key = Config::$encryption_key;
+        $branchResult = $this->db->select("branch.id")
+            ->from('sec_branch')
+            ->join('branch', 'branch.id=sec_branch.branchid')
+            ->where('sec_branch.userid', $this->session->userdata('id'))
+            ->group_by('sec_branch.branchid')
+            ->get()
+            ->result();
+
+        $branchids = [];
+
+        if (isset($branchResult)) {
+            $branchids = array_column($branchResult, 'id');
+        }
+
+        $this->db->select("a.date,AES_DECRYPT(a.service_id,'" . $encryption_key . "') as invoiceno, AES_DECRYPT(b.customer_name, '{$encryption_key}') AS customer_name,AES_DECRYPT(a.grandTotal,'" . $encryption_key . "')  as total");
+        $this->db->from('service a');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
+        $this->db->where('a.date >=', $from_date);
+        $this->db->where('a.date <=', $to_date);
+        if ($empid != "All") {
+            $this->db->where("AES_DECRYPT(a.type2,'" . $encryption_key . "')", $empid);
+        }
+        if ($branch) {
+            $this->db->where("a.branch", $branch);
+        } else {
+            if ($this->session->userdata('user_level2') != 1) {
+
+                $this->db->where_in('a.branch', $branchids);
+            }
+        }
+        $this->db->order_by('a.date', 'desc');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
     //Retrieve todays_purchase_report
     public function todays_purchase_report()
     {

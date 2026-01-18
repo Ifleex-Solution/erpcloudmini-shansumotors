@@ -303,6 +303,23 @@ class Report extends MX_Controller
         echo modules::run('template/layout', $data);
     }
 
+    public function bdtask_todays_service_report()
+    {
+        // $sales_report = $this->report_model->todays_sales_report();
+        $sales_amount = 0;
+        if (!$this->permission1->method('service_report', 'read')->access()) {
+            $previous_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : base_url();
+            redirect($previous_url);
+        }
+        $data = array(
+            'title'        => display('service_report'),
+            // 'sales_amount' => number_format($sales_amount, 2, '.', ','),
+        );
+        $data['module']   = "report";
+        $data['page']     = "servicereport_invoicewise";
+        echo modules::run('template/layout', $data);
+    }
+
     public function bdtask_datewise_sales_report()
     {
         $from_date = $this->input->get('from_date');
@@ -728,6 +745,23 @@ class Report extends MX_Controller
         echo json_encode($_SESSION['sale_reportsri']);
     }
 
+     public function service_reportinvoicewise()
+    {
+        $from_date = $this->input->post('from_date');
+        $to_date  = $this->input->post('to_date');
+        $empid = $this->input->post('empid');
+        $branch = $this->input->post('branch');
+
+        $report_data = $this->report_model->service_reportinvoicewise($from_date, $to_date, $empid, $branch);
+        $_SESSION['service_reportsri'] =  $report_data;
+        $_SESSION['seri_istype'] =   $this->input->post('istype');
+        $_SESSION['serifrom_date'] = $from_date;
+        $_SESSION['serito_date'] =  $to_date;
+
+
+        echo json_encode($_SESSION['service_reportsri']);
+    }
+
     public function purchase_reportinvoicewise()
     {
         $from_date = $this->input->post('from_date');
@@ -883,6 +917,72 @@ class Report extends MX_Controller
 
         $date = date('Y-m-d');
         $filename = "Sales Report(Invoice Wise)_$date.pdf";
+        $pdf->Output($filename, 'I');
+    }
+
+     public function generate_servicereportinvoice()
+    {
+        $page = 1;
+        $pdf = new SalesReportInvoicewise('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Your Name');
+        $pdf->SetTitle('Service Report(Invoice Wise)');
+        $pdf->SetSubject('TCPDF Tutorial');
+        $pdf->SetKeywords('TCPDF, PDF, columns, example');
+        $top_margin = 5;
+        $pdf->SetMargins(15, $top_margin, 10);
+        $pdf->SetAutoPageBreak(TRUE, 20);
+        $pdf->AddPage();
+        $pdf->SetFont('helvetica', '', 10);
+
+        $this->header($pdf, $page, "Service Report (Invoice Wise)", $_SESSION['seri_istype'], $_SESSION['serifrom_date'], $_SESSION['serito_date']);
+
+
+        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->Cell(45, 10, 'Service Date', 'TB', 0, 'L', 0, '', 1);
+        $pdf->Cell(40, 10, 'Invoice No', 'TB', 0, 'L', 0, '', 1);
+        $pdf->Cell(60, 10, 'Customer Name', 'TB', 0, 'L', 0, '', 1);
+        $pdf->Cell(40, 10, 'Amount', 'TB', 0, 'R', 0, '', 1);
+        $pdf->Ln(10);
+
+        $data = isset($_SESSION['service_reportsri']) ? $_SESSION['service_reportsri'] : [];
+        $lineHeight = 10;
+        $maxY = 270;
+
+        $patotal = 0;
+        $total = 0;
+        foreach ($data as $row) {
+
+            if ($pdf->GetY() + $lineHeight > $maxY) {
+                $pdf->updatePageTotal($patotal);
+                $patotal = 0;
+                $pdf->AddPage();
+                $page = $page + 1;
+                $this->header($pdf, $page, "Service Report (Invoice Wise)", $_SESSION['sri_istype'], $_SESSION['srifrom_date'], $_SESSION['srito_date']);
+                $pdf->SetFont('helvetica', 'B', 12);
+                $pdf->Cell(45, 10, 'Sale Date', 'TB', 0, 'L', 0, '', 1);
+                $pdf->Cell(40, 10, 'Invoice No', 'TB', 0, 'L', 0, '', 1);
+                $pdf->Cell(60, 10, 'Customer Name', 'TB', 0, 'L', 0, '', 1);
+                $pdf->Cell(40, 10, 'Amount', 'TB', 0, 'R', 0, '', 1);
+                $pdf->Ln(10);
+            }
+            $total = $total + $row['total'];
+            $patotal = $patotal + $row['total'];
+
+            $pdf->SetFont('', '', 10);
+            $pdf->Cell(45, 8, $row['date'], 0, 0, 'L');
+            $pdf->Cell(40, 8,  $row['invoiceno'], 0, 0, 'L');
+            $pdf->Cell(60, 8,  $row['customer_name'], 0, 0, 'L');
+            $pdf->Cell(40, 8, number_format($row['total'], 2), 0, 1, 'R');
+        }
+        $pdf->SetFont('', 'B', 12);
+        $pdf->Cell(50, 10, "Total Amount:", 'TB', 0, 'L');
+        $pdf->Cell(100, 10, "", 'TB', 0, 'L');
+        $pdf->Cell(35, 10, number_format($total, 2), 'TB', 1, 'R');
+        $pdf->updatePageTotal($patotal);
+
+        $date = date('Y-m-d');
+        $filename = "Service Report(Invoice Wise)_$date.pdf";
         $pdf->Output($filename, 'I');
     }
 
@@ -1718,6 +1818,18 @@ FROM (
        p.createddate,p.branch
     FROM purchase p
     INNER JOIN payment_type pt ON pt.id = p.payment_type
+     UNION
+    SELECT 
+        se.date, 
+        'Service' AS incidenttype,
+        se.payment_type,
+        pt.name AS payment_method,
+        AES_DECRYPT(se.service_id,  '" . $encryption_key . "') AS invoice_no,
+        AES_DECRYPT(se.grandTotal,  '" . $encryption_key . "') AS grandTotal,
+         AES_DECRYPT(se.type2,  '" . $encryption_key . "') AS type2,
+       se.createddate,se.branch
+    FROM service se
+    INNER JOIN payment_type pt ON pt.id = se.payment_type
 ) AS cashbook
  WHERE date BETWEEN '$from_date' AND '$to_date'" . $sqljoin . "
 ORDER by createddate desc;";
