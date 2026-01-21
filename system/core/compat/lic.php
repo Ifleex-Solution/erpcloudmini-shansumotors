@@ -169,24 +169,24 @@ class Lic
         }
 
         //check licence
-        if (isset($_SESSION['LicSysLog']) && @sizeof($_SESSION['LicSysLog']) > 0 && isset($_SESSION['LicSysLog']->expire_date) && isset($_SESSION['LicSysLog']->product_key) && isset($_SESSION['LicSysLog']->licence)) {
-            //call envato LicSysLog object
-            $this->envato($_SESSION['LicSysLog']);
-        } else {
+        // if (isset($_SESSION['LicSysLog']) && @sizeof($_SESSION['LicSysLog']) > 0 && isset($_SESSION['LicSysLog']->expire_date) && isset($_SESSION['LicSysLog']->product_key) && isset($_SESSION['LicSysLog']->licence)) {
+        //     //call envato LicSysLog object
+        //     $this->envato($_SESSION['LicSysLog']);
+        // } else {
 
-            //check licence server is alive or not
-            if (!$this->serverAliveOrNot()) {
-                return false;
-            }
+        //     //check licence server is alive or not
+        //     if (!$this->serverAliveOrNot()) {
+        //         return false;
+        //     }
 
-            $this->message = "Your application license has expired! <br>Contact <i><a href='https://bdtask.com/#contact' target='_blank' style='color:#f5f5f5'>bdtask.com</a></i>";
-            if (file_exists($this->log_path)) {
-                if (!$this->fileRead())
-                    $this->html($this->product_key);
-            } else {
-                $this->html($this->product_key);
-            }
-        }
+        //     $this->message = "Your application license has expired! <br>Contact <i><a href='https://bdtask.com/#contact' target='_blank' style='color:#f5f5f5'>bdtask.com</a></i>";
+        //     if (file_exists($this->log_path)) {
+        //         if (!$this->fileRead())
+        //             $this->html($this->product_key);
+        //     } else {
+        //         $this->html($this->product_key);
+        //     }
+        // }
     }
 
     private function envato($LicSysLog = array())
